@@ -8,10 +8,22 @@ Tidak perlu instalasi, server, atau koneksi internet (kecuali untuk memuat font)
 
 | Mode | Jumlah Level | Konsep yang Dilatih |
 |---|---|---|
-| 🗺️ **Labirin (Maze)** | 10 | Sekuensial, Perulangan (Loop, termasuk loop bersarang), Kondisional (Jika–Maka), Debugging |
-| 🧩 **Teka-Teki (Puzzle)** | 10 | Menyusun urutan langkah algoritma kehidupan sehari-hari |
+| 🗺️ **Labirin (Maze)** | 25 | Sekuensial, Perulangan (Loop, termasuk loop bersarang), Kondisional (Jika–Maka), Debugging |
+| 🧩 **Teka-Teki (Puzzle)** | 25 | Menyusun urutan langkah algoritma, dari kegiatan sehari-hari hingga Bubble Sort, Pencarian Biner, dan FizzBuzz |
 | 🎨 **Pengenalan Pola** | 50 | Pola warna, angka, huruf, dan logika (Pemula → Legenda) |
 | 🏆 **Kuis & Sertifikat** | 5 soal | Terbuka setelah semua mode selesai. Lulus jika **minimal 3 dari 5** jawaban benar |
+
+### Tingkat Kesulitan Maze & Puzzle
+
+Setiap 5 level membentuk satu tingkat. Level berikutnya terbuka setelah level sebelumnya selesai.
+
+| Tingkat | Level | Maze | Puzzle |
+|---|---|---|---|
+| 🌱 Pemula | 1 – 5 | Peta 6×6: sekuensial, loop, sensor, debugging | Urutan kegiatan harian, if-else dan loop sederhana |
+| 📘 Dasar | 6 – 10 | Peta 6×6: kombinasi konsep | Login, telur rebus, pencarian linear |
+| ⚙️ Menengah | 11 – 15 | Peta 7×7: rute panjang, pola keliling, sensor berulang | Else-if bertingkat, loop *selama*, variabel |
+| 🚀 Mahir | 16 – 20 | Peta 7×7: **loop bersarang**, sensor rusak, lorong buntu | Kondisional di dalam loop, rata-rata, nilai terbesar |
+| 👑 Master | 21 – 25 | Peta 8×8 penuh lorong buntu, gabungan semua konsep | ATM (if bersarang), Bubble Sort, tabel perkalian, Pencarian Biner, FizzBuzz |
 
 Setelah lulus kuis, siswa mengetik nama lengkap dan dapat **mencetak / menyimpan sertifikat sebagai PDF** (gunakan menu *Print → Save as PDF* di browser).
 
@@ -47,8 +59,10 @@ app.js       Logika game dan data soal
 
 Semua data soal ada di bagian atas `app.js`:
 
-- `LEVELS` – level Maze (peta, dinding, ubin sensor, blok yang boleh dipakai, batas blok).
+- `LEVELS` – level Maze. Level 11–25 ditulis sebagai **peta teks** yang mudah diubah:
+  `#` dinding, `.` lantai, `S` posisi awal Albi, `G` portal, `Y` sensor kuning (belok kanan), `P` sensor ungu (belok kiri).
+  Atur juga `allowedBlocks` (blok yang tersedia) dan `maxBlocks` (batas blok).
 - `QUIZ_QUESTIONS` – soal kuis (`correct` = indeks jawaban benar, dimulai dari 0).
 - `QUIZ_PASS_SCORE` – nilai minimal kelulusan kuis.
-- `PUZZLE_LEVELS` – soal puzzle (`correctOrder` = urutan benar; `altOrders` = urutan alternatif yang juga diterima, opsional).
+- `PUZZLE_LEVELS` – soal puzzle (`correctOrder` = urutan benar; `altOrders` = urutan alternatif yang juga diterima, opsional). Awali teks dengan 2 spasi per tingkat untuk membuat indentasi (isi JIKA/Ulangi).
 - `PATTERN_LEVELS` – soal pola (`correctIndex` = indeks jawaban benar pada `options`).
