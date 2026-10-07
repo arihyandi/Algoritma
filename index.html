@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
 
 <body>
@@ -27,6 +28,7 @@
     <!-- 1. LANDING PAGE -->
     <div id="landing-page" class="view-screen active">
         <div class="hero-container">
+            <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo school-logo-hero">
             <div class="hero-logo">
                 <div class="logo-icon">🤖</div>
                 <h1>AlgoQuest</h1>
@@ -93,7 +95,7 @@
             <header class="page-header">
                 <button class="btn btn-secondary back-to-home">← Menu Utama</button>
                 <h2>Pilih Misi Pembelajaran</h2>
-                <div style="width: 100px;"></div> <!-- Spacer -->
+                <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo">
             </header>
 
             <!-- Ringkasan progres Mode Maze (diisi oleh updateProgressDisplays() di app.js) -->
@@ -132,6 +134,7 @@
             <!-- Arena Header -->
             <header class="arena-header">
                 <div class="header-left">
+                    <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo school-logo-small">
                     <button class="btn btn-secondary" id="back-to-selector">← Pilih Level</button>
                     <div>
                         <h2 id="current-level-title">Misi 1: Langkah Pertama</h2>
@@ -233,6 +236,7 @@
         <div class="container small-container">
             <div class="quiz-card glass-panel">
                 <header class="quiz-header">
+                    <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo school-logo-quiz">
                     <h2>Ujian Master Algoritma</h2>
                     <div class="quiz-progress-bar">
                         <div class="progress-fill" id="quiz-progress-fill"></div>
@@ -267,6 +271,7 @@
             <div class="certificate-wrapper">
                 <div class="certificate glass-panel" id="certificate-print-area">
                     <div class="cert-border">
+                        <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo school-logo-cert">
                         <div class="cert-logo">🤖 ALGOQUEST</div>
                         <div class="cert-title">SERTIFIKAT KELULUSAN</div>
                         <div class="cert-subtitle">Sertifikat ini dengan bangga diberikan kepada:</div>
@@ -315,7 +320,10 @@
     <div id="puzzle-game-page" class="view-screen">
         <div class="container medium-container">
             <header class="page-header" style="margin-bottom: 1.5rem;">
-                <button class="btn btn-secondary" id="back-to-mode-btn">← Menu Utama</button>
+                <div class="header-brand">
+                    <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo">
+                    <button class="btn btn-secondary" id="back-to-mode-btn">← Menu Utama</button>
+                </div>
                 <div>
                     <h2 id="puzzle-level-title">Teka-Teki 1: Urutan Pagi Hari</h2>
                     <div class="level-concept-tag seq" id="puzzle-level-tag">Konsep: Sekuensial</div>
@@ -359,7 +367,10 @@
     <div id="pattern-game-page" class="view-screen">
         <div class="container medium-container">
             <header class="page-header" style="margin-bottom: 1.5rem;">
-                <button class="btn btn-secondary" id="back-to-mode-pattern-btn">← Menu Utama</button>
+                <div class="header-brand">
+                    <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo">
+                    <button class="btn btn-secondary" id="back-to-mode-pattern-btn">← Menu Utama</button>
+                </div>
                 <div>
                     <h2 id="pattern-level-title">Pola 1: Pola Warna Berulang</h2>
                     <div class="level-concept-tag seq" id="pattern-level-tag">Konsep: Pengenalan Pola</div>

@@ -2013,3 +2013,72 @@ body {
         border-radius: 10px;
     }
 }
+
+/* ==========================================================================
+   LOGO SEKOLAH (Kalam Kudus) di setiap layar
+   ========================================================================== */
+.school-logo {
+    display: block;
+    width: 56px;
+    height: auto;
+    flex-shrink: 0;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.school-logo-hero {
+    width: 130px;
+    margin: 0 auto 0.75rem;
+}
+
+.school-logo-small {
+    width: 44px;
+}
+
+.school-logo-quiz {
+    width: 72px;
+    margin: 0 auto 0.75rem;
+}
+
+/* Di sertifikat: logo menjadi lambang di pojok kiri atas agar tata letak A4 tidak bergeser */
+.cert-border {
+    position: relative;
+}
+
+.school-logo-cert {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.5rem;
+    width: 84px;
+}
+
+/* Logo + tombol kembali di header Puzzle & Pola */
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+@media (max-width: 600px) {
+    .school-logo {
+        width: 44px;
+    }
+    .school-logo-hero {
+        width: 100px;
+    }
+    .school-logo-quiz {
+        width: 64px;
+    }
+    .school-logo-cert {
+        width: 44px;
+        top: 0.75rem;
+        left: 0.75rem;
+    }
+}
+
+@media print {
+    .school-logo-cert {
+        filter: none;
+    }
+}
