@@ -92,6 +92,7 @@ const synth = new SoundSynth();
 const LEVELS = {
     1: {
         id: 1,
+        badge: "seq",
         title: "Misi 1: Langkah Pertama",
         concept: "Konsep: Sekuensial (Urutan)",
         instruction: "Susun langkah-langkah lurus dan belok untuk mengarahkan Albi ke Portal tujuan. Ingat, robot bergerak sesuai urutan kode dari atas ke bawah!",
@@ -114,6 +115,7 @@ const LEVELS = {
     },
     2: {
         id: 2,
+        badge: "loop",
         title: "Misi 2: Koridor Berulang",
         concept: "Konsep: Perulangan (Loops)",
         instruction: "Gunakan blok 'Ulangi' untuk membuat pola tangga (Maju, Kanan, Maju, Kiri) sebanyak 3 kali agar robot mencapai portal dengan jumlah blok minimal!",
@@ -143,6 +145,7 @@ const LEVELS = {
     },
     3: {
         id: 3,
+        badge: "cond",
         title: "Misi 3: Sensor Warna",
         concept: "Konsep: Kondisional (Percabangan)",
         instruction: "Gunakan sensor warna! Letakkan blok gerakan dan blok 'Jika Ubin Kuning/Ungu' di dalam perulangan 8 Kali agar robot otomatis berbelok saat menginjak ubin sensor.",
@@ -168,6 +171,7 @@ const LEVELS = {
     },
     4: {
         id: 4,
+        badge: "debug",
         title: "Misi 4: Membetulkan Kode",
         concept: "Konsep: Debugging (Menemukan Bug)",
         instruction: "Seseorang menulis program yang rusak! Albi menabrak dinding jika dijalankan. Cari kesalahan bloknya, hapus/atur ulang, dan buatlah program yang benar.",
@@ -199,6 +203,7 @@ const LEVELS = {
     },
     5: {
         id: 5,
+        badge: "loop",
         title: "Misi 5: Tangga Panjang",
         concept: "Konsep: Perulangan Lanjutan",
         instruction: "Robot harus menaiki tangga panjang melewati 5 anak tangga! Gunakan blok 'Ulangi 5 Kali' dan susun pola gerak dalam loop: Maju, Kanan, Maju, Kiri.",
@@ -221,6 +226,7 @@ const LEVELS = {
     },
     6: {
         id: 6,
+        badge: "cond",
         title: "Misi 6: Sensor Ganda",
         concept: "Konsep: Kondisional Majemuk",
         instruction: "Terdapat 2 sensor warna di lintasan! Gunakan blok 'Ulangi 7 Kali' dengan pola: Maju, Jika Ubin Kuning, Jika Ubin Ungu. Sensor akan otomatis membelokkan robot!",
@@ -246,6 +252,7 @@ const LEVELS = {
     },
     7: {
         id: 7,
+        badge: "loop",
         title: "Misi 7: Kode Hybrid",
         concept: "Konsep: Sekuensial + Perulangan",
         instruction: "Gabungkan sekuensial dan perulangan! Susun 2 blok 'Maju' lalu 'Belok Kanan', kemudian gunakan blok 'Ulangi 3 Kali' berisi 'Maju', lalu letakkan 'Belok Kiri' dan 2 'Maju' lagi di luar perulangan.",
@@ -269,6 +276,7 @@ const LEVELS = {
     },
     8: {
         id: 8,
+        badge: "seq",
         title: "Misi 8: Labirin Sempit",
         concept: "Konsep: Navigasi Presisi",
         instruction: "Labirin berliku! Susun instruksi berbelok dan maju yang presisi. Jalur: Maju 2x, Kanan, Maju 2x, Kiri, Maju 2x, Kanan, Maju 2x. Jangan sampai menabrak dinding!",
@@ -292,6 +300,7 @@ const LEVELS = {
     },
     9: {
         id: 9,
+        badge: "debug",
         title: "Misi 9: Loop yang Rusak",
         concept: "Konsep: Debugging Perulangan",
         instruction: "Ada loop yang rusak! Program berisi loop yang salah konfigurasi. Periksa dan perbaiki: ubah jumlah pengulangan dan ganti urutan blok di dalamnya agar Albi mencapai portal.",
@@ -321,14 +330,17 @@ const LEVELS = {
     },
     10: {
         id: 10,
+        badge: "cond",
         title: "Misi 10: Tantangan Master",
         concept: "Konsep: Logika Algoritma Master",
-        instruction: "Tantangan terakhir sebelum kuis! Rute panjang dengan sensor warna dan lorong berliku. Gunakan semua kemampuanmu: Loop + Kondisional + Sekuensial untuk menyelesaikannya!",
+        instruction: "Tantangan terakhir sebelum kuis! Sensor warna membantu Albi berbelok otomatis, tetapi tikungan terakhir dekat portal TIDAK memiliki sensor. Gabungkan Loop + Kondisional untuk bagian bersensor, lalu tambahkan langkah Sekuensial manual di akhir!",
         gridSize: 6,
         start: { x: 0, y: 5, dir: 'UP' },
         goal: { x: 5, y: 0 },
-        // Path with sensors: (0,5)->(0,4)->(0,3)[Yellow->Right]->(1,3)[Purple->Left]->(1,2)->(1,1)[Yellow->Right]->(2,1)->(3,1)[Purple->Left]->(3,0)[Yellow->Right]->(4,0)->(5,0)
-        yellowTiles: [{ x: 0, y: 3 }, { x: 1, y: 1 }, { x: 3, y: 0 }],
+        // Path with sensors: (0,5)->(0,4)->(0,3)[Yellow->Right]->(1,3)[Purple->Left]->(1,2)->(1,1)[Yellow->Right]->(2,1)->(3,1)[Purple->Left]->(3,0)
+        // (3,0) sengaja tanpa sensor: siswa harus menambahkan Belok Kanan + Maju manual setelah loop.
+        // Contoh solusi (7 blok): Ulangi 8x [Maju, Jika Kuning, Jika Ungu], Belok Kanan, Maju, Maju
+        yellowTiles: [{ x: 0, y: 3 }, { x: 1, y: 1 }],
         purpleTiles: [{ x: 1, y: 3 }, { x: 3, y: 1 }],
         walls: [
             { x: 1, y: 5 }, { x: 2, y: 5 }, { x: 3, y: 5 }, { x: 4, y: 5 }, { x: 5, y: 5 },
@@ -411,7 +423,9 @@ const PUZZLE_LEVELS = {
             { id: "p1-2", text: "Mandi Pagi", correctOrder: 1 },
             { id: "p1-3", text: "Sarapan Pagi", correctOrder: 2 },
             { id: "p1-4", text: "Pergi ke Sekolah", correctOrder: 3 }
-        ]
+        ],
+        // Mandi dan sarapan boleh ditukar urutannya
+        altOrders: [["p1-1", "p1-3", "p1-2", "p1-4"]]
     },
     2: {
         id: 2,
@@ -423,7 +437,9 @@ const PUZZLE_LEVELS = {
             { id: "p2-2", text: "Tuangkan Air Panas Secukupnya", correctOrder: 1 },
             { id: "p2-3", text: "Aduk Air Hingga Gula Larut", correctOrder: 2 },
             { id: "p2-4", text: "Secangkir Teh Hangat Siap Dinikmati", correctOrder: 3 }
-        ]
+        ],
+        // Air panas boleh dituang lebih dulu sebelum teh & gula dimasukkan
+        altOrders: [["p2-2", "p2-1", "p2-3", "p2-4"]]
     },
     3: {
         id: 3,
@@ -1046,7 +1062,8 @@ const PATTERN_LEVELS = {
 // Pattern Game State variables
 let currentPatternLevel = 1;
 let completedPatternLevels = [];
-let selectedPatternOption = null;
+let selectedPatternOption = null; // index of the option as displayed on screen
+let patternOptionOrder = []; // displayed position -> original index in lvl.options
 
 // Puzzle Game State variables
 let currentPuzzleLevel = 1;
@@ -1219,6 +1236,17 @@ let dragState = {
 
 let quizIndex = 0;
 let quizScore = 0;
+const QUIZ_PASS_SCORE = 3; // minimal jawaban benar untuk lulus kuis
+
+// Fisher-Yates shuffle: every ordering is equally likely (returns a new array)
+function shuffleArray(arr) {
+    const result = arr.slice();
+    for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+}
 
 // DOM Elements cache
 const dom = {
@@ -1627,21 +1655,9 @@ function renderLevelsSelector() {
         card.className = `level-card glass-panel ${isUnlocked ? 'unlocked' : 'locked'} ${isCompleted ? 'completed' : ''}`;
         card.setAttribute('data-level', id);
 
-        // Map Level Badges
-        let badgeClass = 'seq';
-        if (id === 2) badgeClass = 'loop';
-        if (id === 3) badgeClass = 'cond';
-        if (id === 4) badgeClass = 'debug';
-        if (id === 5) badgeClass = 'loop';
-        if (id === 6) badgeClass = 'cond';
-        if (id === 7) badgeClass = 'loop';
-        if (id === 8) badgeClass = 'seq';
-        if (id === 9) badgeClass = 'debug';
-        if (id === 10) badgeClass = 'cond';
-
         card.innerHTML = `
             <div class="level-num">${id}</div>
-            <div class="level-badge ${badgeClass}">${lvl.concept.split(': ')[1]}</div>
+            <div class="level-badge ${lvl.badge}">${lvl.concept.split(': ')[1]}</div>
             <h3>${lvl.title}</h3>
             <p>${lvl.instruction}</p>
             <button class="btn btn-level-action" ${isUnlocked ? '' : 'disabled'}>
@@ -1683,17 +1699,7 @@ function loadLevel(levelId) {
     dom.currentLevelTag.innerText = lvl.concept;
 
     // Dynamic styles based on levels
-    dom.currentLevelTag.className = 'level-concept-tag';
-    if (levelId === 1) dom.currentLevelTag.classList.add('seq');
-    if (levelId === 2) dom.currentLevelTag.classList.add('loop');
-    if (levelId === 3) dom.currentLevelTag.classList.add('cond');
-    if (levelId === 4) dom.currentLevelTag.classList.add('debug');
-    if (levelId === 5) dom.currentLevelTag.classList.add('loop');
-    if (levelId === 6) dom.currentLevelTag.classList.add('cond');
-    if (levelId === 7) dom.currentLevelTag.classList.add('loop');
-    if (levelId === 8) dom.currentLevelTag.classList.add('seq');
-    if (levelId === 9) dom.currentLevelTag.classList.add('debug');
-    if (levelId === 10) dom.currentLevelTag.classList.add('cond');
+    dom.currentLevelTag.className = `level-concept-tag ${lvl.badge}`;
 
     dom.levelIntroText.innerText = lvl.instruction;
 
@@ -2208,6 +2214,8 @@ function handleWorkspaceDrop(targetParentId, insertIndex) {
     if (dragState.source === 'toolbox') {
         // Check block limit
         if (countTotalBlocks(workspaceBlocks) >= lvl.maxBlocks) {
+            synth.playWrong();
+            alert(`Batas maksimal blok untuk misi ini adalah ${lvl.maxBlocks} blok!`);
             return;
         }
         const newBlock = {
@@ -2231,6 +2239,13 @@ function handleWorkspaceDrop(targetParentId, insertIndex) {
         // Reordering: remove from old position, insert at new position
         const movingBlock = findBlockById(workspaceBlocks, dragState.id);
         if (!movingBlock) return;
+
+        // A loop cannot be dropped into itself or into one of its own children,
+        // otherwise the block would be removed and never re-inserted (lost).
+        if (targetParentId && (targetParentId === movingBlock.id || findBlockById(movingBlock.children || [], targetParentId))) {
+            synth.playWrong();
+            return;
+        }
 
         // Clone the block to re-insert
         const blockClone = JSON.parse(JSON.stringify(movingBlock));
@@ -2376,24 +2391,16 @@ function compileWorkspace(blocksArr) {
     let queue = [];
 
     blocksArr.forEach(block => {
-        if (block.type === 'move' || block.type === 'turn-left' || block.type === 'turn-right' || block.type === 'if-yellow' || block.type === 'if-purple') {
+        if (block.type === 'loop') {
+            // Unroll loops recursively so nested loops (loop inside loop) also run
+            for (let i = 0; i < block.loopCount; i++) {
+                queue = queue.concat(compileWorkspace(block.children || []));
+            }
+        } else {
             queue.push({
                 blockId: block.id,
                 type: block.type
             });
-        } else if (block.type === 'loop') {
-            // Unroll loops! Repeat nested contents loopCount times
-            for (let i = 0; i < block.loopCount; i++) {
-                if (block.children && block.children.length > 0) {
-                    block.children.forEach(child => {
-                        queue.push({
-                            blockId: child.id,
-                            parentLoopId: block.id, // reference parent loop
-                            type: child.type
-                        });
-                    });
-                }
-            }
         }
     });
 
@@ -2635,14 +2642,35 @@ function nextQuizQuestion() {
 }
 
 function finishQuiz() {
+    // Update progress bar to 100%
+    dom.quizProgressFill.style.width = `100%`;
+
+    const total = QUIZ_QUESTIONS.length;
+
+    if (quizScore < QUIZ_PASS_SCORE) {
+        synth.playFailure();
+        alert(`Nilai kuismu ${quizScore} dari ${total}. Kamu membutuhkan minimal ${QUIZ_PASS_SCORE} jawaban benar untuk lulus.\n\nPelajari kembali materinya, lalu coba kuis sekali lagi!`);
+        showScreen('landing-page');
+        updateCertificateCard();
+        return;
+    }
+
     synth.playSuccess();
     mazeQuizCompleted = true;
     saveProgress();
 
-    // Update progress bar to 100%
-    dom.quizProgressFill.style.width = `100%`;
+    const remaining = [];
+    if ((new Set(completedLevels)).size < Object.keys(LEVELS).length) remaining.push('Mode Labirin (Maze)');
+    if ((new Set(completedPuzzleLevels)).size < Object.keys(PUZZLE_LEVELS).length) remaining.push('Mode Teka-Teki (Puzzle)');
+    if ((new Set(completedPatternLevels)).size < Object.keys(PATTERN_LEVELS).length) remaining.push('Mode Pengenalan Pola');
 
-    alert("Selamat! Kamu telah menyelesaikan Kuis Algoritma Mode Labirin (Maze)! Selesaikan juga Mode Teka-Teki (Puzzle) untuk membuka Sertifikat Kelulusan di Menu Utama.");
+    let message = `Selamat, kamu LULUS Kuis Algoritma dengan nilai ${quizScore} dari ${total}!`;
+    if (remaining.length > 0) {
+        message += `\n\nSelesaikan juga ${remaining.join(' dan ')} untuk membuka Sertifikat Kelulusan di Menu Utama.`;
+    } else {
+        message += `\n\nSertifikat Kelulusan kini bisa diklaim melalui Menu Utama.`;
+    }
+    alert(message);
     showScreen('landing-page');
     updateCertificateCard();
 }
@@ -2664,22 +2692,27 @@ function loadPuzzleLevel(levelId) {
     dom.puzzleLevelCounter.innerText = `Teka-Teki ${levelId} dari ${Object.keys(PUZZLE_LEVELS).length}`;
 
     // Scramble/Shuffle the blocks
-    puzzleBlocks = JSON.parse(JSON.stringify(lvl.blocks));
     do {
-        puzzleBlocks.sort(() => Math.random() - 0.5);
+        puzzleBlocks = shuffleArray(JSON.parse(JSON.stringify(lvl.blocks)));
     } while (isPuzzleAlreadyCorrect()); // make sure it's not already correct by accident
 
     renderPuzzleWorkspace();
     showScreen('puzzle-game-page');
 }
 
+// Main order (by correctOrder) plus any alternative orders that are also logical
+function getAcceptedPuzzleOrders(lvl) {
+    const mainOrder = lvl.blocks.slice()
+        .sort((a, b) => a.correctOrder - b.correctOrder)
+        .map(b => b.id);
+    return [mainOrder].concat(lvl.altOrders || []);
+}
+
 function isPuzzleAlreadyCorrect() {
-    for (let i = 0; i < puzzleBlocks.length; i++) {
-        if (puzzleBlocks[i].correctOrder !== i) {
-            return false;
-        }
-    }
-    return true;
+    const currentIds = puzzleBlocks.map(b => b.id);
+    return getAcceptedPuzzleOrders(PUZZLE_LEVELS[currentPuzzleLevel]).some(order =>
+        order.length === currentIds.length && order.every((id, i) => id === currentIds[i])
+    );
 }
 
 function renderPuzzleWorkspace() {
@@ -2822,6 +2855,9 @@ function loadPatternLevel(levelId) {
 
     const lvl = PATTERN_LEVELS[levelId];
 
+    // Shuffle answer positions so the correct answer is not always in the same place
+    patternOptionOrder = shuffleArray(lvl.options.map((_, i) => i));
+
     dom.patternLevelTitle.innerText = lvl.title;
     dom.patternLevelTag.innerText = lvl.concept;
     dom.patternIntroText.innerText = lvl.instruction;
@@ -2841,7 +2877,7 @@ function renderPatternWorkspace() {
         div.className = 'pattern-item';
         if (item === '?') {
             div.classList.add('question-mark');
-            div.innerText = selectedPatternOption !== null ? lvl.options[selectedPatternOption] : '?';
+            div.innerText = selectedPatternOption !== null ? lvl.options[patternOptionOrder[selectedPatternOption]] : '?';
         } else {
             div.innerText = item;
         }
@@ -2850,7 +2886,8 @@ function renderPatternWorkspace() {
 
     // Render Answer Options
     dom.patternOptionsList.innerHTML = '';
-    lvl.options.forEach((optText, oIdx) => {
+    patternOptionOrder.forEach((originalIdx, oIdx) => {
+        const optText = lvl.options[originalIdx];
         const btn = document.createElement('button');
         btn.className = 'pattern-option-btn';
         if (selectedPatternOption === oIdx) {
@@ -2876,7 +2913,8 @@ function checkPatternSolution() {
     }
 
     const lvl = PATTERN_LEVELS[currentPatternLevel];
-    const isCorrect = (selectedPatternOption === lvl.correctIndex);
+    const correctDisplayIdx = patternOptionOrder.indexOf(lvl.correctIndex);
+    const isCorrect = (selectedPatternOption === correctDisplayIdx);
 
     const optionBtns = dom.patternOptionsList.querySelectorAll('.pattern-option-btn');
 
@@ -2918,8 +2956,8 @@ function checkPatternSolution() {
         if (optionBtns[selectedPatternOption]) {
             optionBtns[selectedPatternOption].classList.add('wrong-reveal');
         }
-        if (optionBtns[lvl.correctIndex]) {
-            optionBtns[lvl.correctIndex].classList.add('correct-reveal');
+        if (optionBtns[correctDisplayIdx]) {
+            optionBtns[correctDisplayIdx].classList.add('correct-reveal');
         }
 
         dom.failureModalTitle.innerText = "Pilihan Pola Belum Tepat! ❌";
