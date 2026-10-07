@@ -48,14 +48,14 @@
                         <span class="mode-badge seq">MODE 1</span>
                         <span class="mode-icon">🗺️</span>
                         <h3>Mode Labirin (Maze)</h3>
-                        <p>Bantu Albi mencapai portal melalui 10 level logika pemrograman!</p>
+                        <p>Bantu Albi mencapai portal melalui 25 level logika pemrograman, dari Pemula hingga Master!</p>
                         <span class="mode-action-btn">Mulai Main →</span>
                     </button>
                     <button class="mode-card glass-panel" id="mode-puzzle-btn">
                         <span class="mode-badge loop">MODE 2</span>
                         <span class="mode-icon">🧩</span>
                         <h3>Mode Teka-Teki (Puzzle)</h3>
-                        <p>Asah logikamu dengan mengurutkan potongan blok algoritma secara logis!</p>
+                        <p>Asah logikamu dengan mengurutkan potongan blok algoritma melalui 25 teka-teki bertingkat!</p>
                         <span class="mode-action-btn">Mulai Main →</span>
                     </button>
                     <button class="mode-card glass-panel" id="mode-pattern-btn">
@@ -94,44 +94,7 @@
             </header>
 
             <div class="levels-grid">
-                <!-- Level 1 -->
-                <div class="level-card glass-panel unlocked" data-level="1">
-                    <div class="level-num">1</div>
-                    <div class="level-badge seq">Sekuensial</div>
-                    <h3>Langkah Pertama</h3>
-                    <p>Bantu Albi berjalan lurus dan berbelok untuk mencapai portal tujuan dengan urutan langkah yang
-                        tepat.</p>
-                    <button class="btn btn-level-action">Buka Misi</button>
-                </div>
-
-                <!-- Level 2 -->
-                <div class="level-card glass-panel locked" data-level="2">
-                    <div class="level-num">2</div>
-                    <div class="level-badge loop">Perulangan</div>
-                    <h3>Koridor Berulang</h3>
-                    <p>Belajar menulis kode yang efisien! Gunakan blok Ulangi (Loop) agar langkah robot lebih singkat.
-                    </p>
-                    <button class="btn btn-level-action" disabled>Terkunci</button>
-                </div>
-
-                <!-- Level 3 -->
-                <div class="level-card glass-panel locked" data-level="3">
-                    <div class="level-num">3</div>
-                    <div class="level-badge cond">Kondisional</div>
-                    <h3>Sensor Warna</h3>
-                    <p>Gunakan logika pengambilan keputusan (Jika-Maka) berdasarkan sensor deteksi warna ubin.</p>
-                    <button class="btn btn-level-action" disabled>Terkunci</button>
-                </div>
-
-                <!-- Level 4 -->
-                <div class="level-card glass-panel locked" data-level="4">
-                    <div class="level-num">4</div>
-                    <div class="level-badge debug">Debugging</div>
-                    <h3>Membetulkan Kode</h3>
-                    <p>Albi memiliki program yang rusak! Analisis kesalahan program dan perbaiki kodenya agar berhasil.
-                    </p>
-                    <button class="btn btn-level-action" disabled>Terkunci</button>
-                </div>
+                <!-- Kartu level dibuat otomatis oleh renderLevelsSelector() di app.js -->
             </div>
 
             <!-- Quiz Unlock Section -->
@@ -139,8 +102,8 @@
                 <div class="quiz-status-icon">🔒</div>
                 <div>
                     <h3>Kuis & Sertifikat Algoritma</h3>
-                    <p>Selesaikan semua 10 level di atas untuk membuka kuis pengetahuan algoritma dan dapatkan
-                        Sertifikat Master Algoritma Anda!</p>
+                    <p>Selesaikan semua 25 level di atas untuk membuka kuis pengetahuan algoritma. Jawab minimal 3 dari 5
+                        soal dengan benar untuk lulus!</p>
                 </div>
                 <button class="btn btn-disabled" id="start-quiz-btn-locked" disabled>Kuis Terkunci</button>
             </div>
@@ -209,7 +172,7 @@
                     </div>
 
                     <div class="level-instructions" id="level-intro-text">
-                        Bantu Albi mencapai portal portal ungu dengan menyusun kode balok yang sesuai!
+                        Bantu Albi mencapai portal ungu dengan menyusun kode balok yang sesuai!
                     </div>
 
                     <!-- Canvas/Grid container -->
@@ -234,41 +197,7 @@
                     </div>
 
                     <div class="blocks-container" id="toolbox-blocks-list">
-                        <!-- Action Blocks (rendered dynamic based on level) -->
-                        <div class="block-item block-action cursor-pointer" data-type="move">
-                            <span class="block-icon">↑</span>
-                            <span class="block-label">Maju 1 Langkah</span>
-                        </div>
-                        <div class="block-item block-action cursor-pointer" data-type="turn-left">
-                            <span class="block-icon">↶</span>
-                            <span class="block-label">Belok Kiri</span>
-                        </div>
-                        <div class="block-item block-action cursor-pointer" data-type="turn-right">
-                            <span class="block-icon">↷</span>
-                            <span class="block-label">Belok Kanan</span>
-                        </div>
-
-                        <!-- Loop Blocks (Level 2+) -->
-                        <div class="block-item block-loop cursor-pointer" data-type="loop">
-                            <span class="block-icon">↻</span>
-                            <span class="block-label">Ulangi...</span>
-                            <select class="loop-count-select" id="loop-count-default" onclick="event.stopPropagation()">
-                                <option value="2">2 Kali</option>
-                                <option value="3">3 Kali</option>
-                                <option value="4">4 Kali</option>
-                                <option value="5">5 Kali</option>
-                            </select>
-                        </div>
-
-                        <!-- Conditional Blocks (Level 3+) -->
-                        <div class="block-item block-conditional cursor-pointer" data-type="if-yellow">
-                            <span class="block-icon">?</span>
-                            <span class="block-label">Jika Ubin Kuning...</span>
-                        </div>
-                        <div class="block-item block-conditional cursor-pointer" data-type="if-purple">
-                            <span class="block-icon">?</span>
-                            <span class="block-label">Jika Ubin Ungu...</span>
-                        </div>
+                        <!-- Blok dibuat otomatis oleh renderToolbox() sesuai level di app.js -->
                     </div>
                 </div>
 
@@ -308,12 +237,7 @@
                     <h3 id="quiz-question-text">Apa yang dimaksud dengan Algoritma?</h3>
 
                     <div class="quiz-options" id="quiz-options-container">
-                        <!-- Dynamic Options -->
-                        <button class="option-btn glass-panel">A. Langkah terstruktur untuk menyelesaikan
-                            masalah</button>
-                        <button class="option-btn glass-panel">B. Alat elektronik untuk menyimpan data</button>
-                        <button class="option-btn glass-panel">C. Bahasa gaul programmer</button>
-                        <button class="option-btn glass-panel">D. Koneksi internet nirkabel</button>
+                        <!-- Pilihan jawaban dibuat otomatis oleh loadQuizQuestion() di app.js -->
                     </div>
                 </div>
 
@@ -510,14 +434,6 @@
             <div class="modal-actions">
                 <button class="btn btn-secondary" id="failure-close-btn">Perbaiki Kode</button>
             </div>
-        </div>
-    </div>
-
-    <!-- Help Modal (Optional) -->
-    <div class="modal" id="help-modal">
-        <div class="modal-content glass-panel">
-            <h2>Cara Bermain AlgoQuest</h2>
-            <!-- Instructions and explanations -->
         </div>
     </div>
 

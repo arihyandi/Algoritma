@@ -90,8 +90,10 @@ const synth = new SoundSynth();
 
 // Level Definitions
 const LEVELS = {
+    // --- TINGKAT PEMULA (Misi 1 - 5) & DASAR (Misi 6 - 10): peta 6x6 ---
     1: {
         id: 1,
+        badge: "seq",
         title: "Misi 1: Langkah Pertama",
         concept: "Konsep: Sekuensial (Urutan)",
         instruction: "Susun langkah-langkah lurus dan belok untuk mengarahkan Albi ke Portal tujuan. Ingat, robot bergerak sesuai urutan kode dari atas ke bawah!",
@@ -114,6 +116,7 @@ const LEVELS = {
     },
     2: {
         id: 2,
+        badge: "loop",
         title: "Misi 2: Koridor Berulang",
         concept: "Konsep: Perulangan (Loops)",
         instruction: "Gunakan blok 'Ulangi' untuk membuat pola tangga (Maju, Kanan, Maju, Kiri) sebanyak 3 kali agar robot mencapai portal dengan jumlah blok minimal!",
@@ -143,6 +146,7 @@ const LEVELS = {
     },
     3: {
         id: 3,
+        badge: "cond",
         title: "Misi 3: Sensor Warna",
         concept: "Konsep: Kondisional (Percabangan)",
         instruction: "Gunakan sensor warna! Letakkan blok gerakan dan blok 'Jika Ubin Kuning/Ungu' di dalam perulangan 8 Kali agar robot otomatis berbelok saat menginjak ubin sensor.",
@@ -168,6 +172,7 @@ const LEVELS = {
     },
     4: {
         id: 4,
+        badge: "debug",
         title: "Misi 4: Membetulkan Kode",
         concept: "Konsep: Debugging (Menemukan Bug)",
         instruction: "Seseorang menulis program yang rusak! Albi menabrak dinding jika dijalankan. Cari kesalahan bloknya, hapus/atur ulang, dan buatlah program yang benar.",
@@ -199,6 +204,7 @@ const LEVELS = {
     },
     5: {
         id: 5,
+        badge: "loop",
         title: "Misi 5: Tangga Panjang",
         concept: "Konsep: Perulangan Lanjutan",
         instruction: "Robot harus menaiki tangga panjang melewati 5 anak tangga! Gunakan blok 'Ulangi 5 Kali' dan susun pola gerak dalam loop: Maju, Kanan, Maju, Kiri.",
@@ -221,6 +227,7 @@ const LEVELS = {
     },
     6: {
         id: 6,
+        badge: "cond",
         title: "Misi 6: Sensor Ganda",
         concept: "Konsep: Kondisional Majemuk",
         instruction: "Terdapat 2 sensor warna di lintasan! Gunakan blok 'Ulangi 7 Kali' dengan pola: Maju, Jika Ubin Kuning, Jika Ubin Ungu. Sensor akan otomatis membelokkan robot!",
@@ -246,6 +253,7 @@ const LEVELS = {
     },
     7: {
         id: 7,
+        badge: "loop",
         title: "Misi 7: Kode Hybrid",
         concept: "Konsep: Sekuensial + Perulangan",
         instruction: "Gabungkan sekuensial dan perulangan! Susun 2 blok 'Maju' lalu 'Belok Kanan', kemudian gunakan blok 'Ulangi 3 Kali' berisi 'Maju', lalu letakkan 'Belok Kiri' dan 2 'Maju' lagi di luar perulangan.",
@@ -269,6 +277,7 @@ const LEVELS = {
     },
     8: {
         id: 8,
+        badge: "seq",
         title: "Misi 8: Labirin Sempit",
         concept: "Konsep: Navigasi Presisi",
         instruction: "Labirin berliku! Susun instruksi berbelok dan maju yang presisi. Jalur: Maju 2x, Kanan, Maju 2x, Kiri, Maju 2x, Kanan, Maju 2x. Jangan sampai menabrak dinding!",
@@ -292,6 +301,7 @@ const LEVELS = {
     },
     9: {
         id: 9,
+        badge: "debug",
         title: "Misi 9: Loop yang Rusak",
         concept: "Konsep: Debugging Perulangan",
         instruction: "Ada loop yang rusak! Program berisi loop yang salah konfigurasi. Periksa dan perbaiki: ubah jumlah pengulangan dan ganti urutan blok di dalamnya agar Albi mencapai portal.",
@@ -321,14 +331,17 @@ const LEVELS = {
     },
     10: {
         id: 10,
+        badge: "cond",
         title: "Misi 10: Tantangan Master",
         concept: "Konsep: Logika Algoritma Master",
-        instruction: "Tantangan terakhir sebelum kuis! Rute panjang dengan sensor warna dan lorong berliku. Gunakan semua kemampuanmu: Loop + Kondisional + Sekuensial untuk menyelesaikannya!",
+        instruction: "Tantangan terakhir sebelum kuis! Sensor warna membantu Albi berbelok otomatis, tetapi tikungan terakhir dekat portal TIDAK memiliki sensor. Gabungkan Loop + Kondisional untuk bagian bersensor, lalu tambahkan langkah Sekuensial manual di akhir!",
         gridSize: 6,
         start: { x: 0, y: 5, dir: 'UP' },
         goal: { x: 5, y: 0 },
-        // Path with sensors: (0,5)->(0,4)->(0,3)[Yellow->Right]->(1,3)[Purple->Left]->(1,2)->(1,1)[Yellow->Right]->(2,1)->(3,1)[Purple->Left]->(3,0)[Yellow->Right]->(4,0)->(5,0)
-        yellowTiles: [{ x: 0, y: 3 }, { x: 1, y: 1 }, { x: 3, y: 0 }],
+        // Path with sensors: (0,5)->(0,4)->(0,3)[Yellow->Right]->(1,3)[Purple->Left]->(1,2)->(1,1)[Yellow->Right]->(2,1)->(3,1)[Purple->Left]->(3,0)
+        // (3,0) sengaja tanpa sensor: siswa harus menambahkan Belok Kanan + Maju manual setelah loop.
+        // Contoh solusi (7 blok): Ulangi 8x [Maju, Jika Kuning, Jika Ungu], Belok Kanan, Maju, Maju
+        yellowTiles: [{ x: 0, y: 3 }, { x: 1, y: 1 }],
         purpleTiles: [{ x: 1, y: 3 }, { x: 3, y: 1 }],
         walls: [
             { x: 1, y: 5 }, { x: 2, y: 5 }, { x: 3, y: 5 }, { x: 4, y: 5 }, { x: 5, y: 5 },
@@ -342,8 +355,374 @@ const LEVELS = {
         maxBlocks: 8,
         debuggingSetup: null,
         insight: "Seorang master programmer sejati mampu menggabungkan semua teknik algoritma: urutan, pengulangan, kondisional, dan debugging. Selamat, kamu telah menguasai dasar-dasar algoritmika!"
+    },
+    // --- TINGKAT MENENGAH (Misi 11 - 15): peta 7x7 ---
+    11: {
+        id: 11,
+        badge: "seq",
+        title: "Misi 11: Jalur Zig-Zag",
+        concept: "Konsep: Sekuensial Lanjutan",
+        instruction: "Tingkat Menengah dimulai! Peta kini lebih luas (7x7). Susun urutan langkah dan belokan dengan teliti untuk melewati jalur zig-zag panjang. Satu langkah salah saja, Albi akan menabrak!",
+        startDir: 'UP',
+        map: [
+            "#####G#",
+            "#####.#",
+            "###...#",
+            "###.###",
+            "....###",
+            ".######",
+            "S######"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right'],
+        maxBlocks: 15,
+        debuggingSetup: null,
+        insight: "Semakin panjang program, semakin penting ketelitian menyusun urutan. Programmer profesional selalu menelusuri (trace) kodenya langkah demi langkah sebelum menjalankannya."
+    },
+    12: {
+        id: 12,
+        badge: "loop",
+        title: "Misi 12: Keliling Laboratorium",
+        concept: "Konsep: Perulangan Pola",
+        instruction: "Albi harus berkeliling tiga sisi laboratorium. Perhatikan: setiap sisi terdiri dari 4 langkah lalu belok kanan. Temukan pola yang berulang dan bungkus dengan blok Ulangi!",
+        startDir: 'UP',
+        map: [
+            "#######",
+            "#.....#",
+            "#.###.#",
+            "#.###.#",
+            "#.###.#",
+            "#S###G#",
+            "#######"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop'],
+        maxBlocks: 6,
+        debuggingSetup: null,
+        insight: "Kunci perulangan adalah menemukan POLA: bagian instruksi yang sama persis dan terjadi berkali-kali. Setelah polanya ditemukan, cukup tulis sekali dan ulangi."
+    },
+    13: {
+        id: 13,
+        badge: "cond",
+        title: "Misi 13: Tangga Sensor",
+        concept: "Konsep: Kondisional Berulang",
+        instruction: "Jalur berliku dipenuhi ubin sensor. Tanpa blok belok sama sekali, buat Albi berbelok otomatis: gabungkan Maju dan kedua blok Jika di dalam satu perulangan!",
+        startDir: 'UP',
+        map: [
+            "####G##",
+            "####.##",
+            "##Y.P##",
+            "##.####",
+            "Y.P####",
+            ".######",
+            "S######"
+        ],
+        allowedBlocks: ['move', 'loop', 'if-yellow', 'if-purple'],
+        maxBlocks: 4,
+        debuggingSetup: null,
+        insight: "Kondisional di dalam perulangan membuat program bisa beradaptasi: perintah yang sama diulang, tetapi tindakan robot berubah sesuai kondisi ubin yang sedang diinjak."
+    },
+    14: {
+        id: 14,
+        badge: "debug",
+        title: "Misi 14: Langkah yang Hilang",
+        concept: "Konsep: Debugging",
+        instruction: "Program Albi sudah hampir benar, tetapi ia menabrak dinding! Jalankan dulu programnya, amati di mana Albi gagal, lalu temukan langkah yang terlewat di dalam perulangan.",
+        startDir: 'UP',
+        map: [
+            "###...G",
+            "###.###",
+            "###.###",
+            "....###",
+            ".######",
+            ".######",
+            "S..####"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop'],
+        maxBlocks: 9,
+        debuggingSetup: [
+            { type: 'loop', loopCount: 2, children: [{ type: 'move' }, { type: 'move' }, { type: 'move' }, { type: 'turn-right' }, { type: 'move' }, { type: 'move' }, { type: 'turn-left' }] }
+        ],
+        insight: "Bug yang paling sering terjadi adalah langkah yang terlewat atau berlebih satu (off-by-one). Menjalankan program lalu mengamati titik gagalnya adalah cara tercepat menemukan bug."
+    },
+    15: {
+        id: 15,
+        badge: "loop",
+        title: "Misi 15: Tangga dan Lorong",
+        concept: "Konsep: Perulangan + Sekuensial",
+        instruction: "Rute ini terdiri dari dua bagian: tangga yang berulang, lalu lorong lurus menuju portal. Gunakan perulangan untuk bagian yang berpola dan perintah biasa untuk sisanya!",
+        startDir: 'UP',
+        map: [
+            "#######",
+            "###...G",
+            "###.###",
+            "##..###",
+            "#..####",
+            "..#####",
+            "S.#####"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop'],
+        maxBlocks: 10,
+        debuggingSetup: null,
+        insight: "Program nyata jarang hanya berisi satu jenis struktur. Programmer memecah masalah menjadi beberapa bagian (dekomposisi), lalu memilih struktur terbaik untuk tiap bagian."
+    },
+    // --- TINGKAT MAHIR (Misi 16 - 20): peta 7x7, perulangan bersarang ---
+    16: {
+        id: 16,
+        badge: "loop",
+        title: "Misi 16: Loop di Dalam Loop",
+        concept: "Konsep: Perulangan Bersarang",
+        instruction: "Tingkat Mahir! Albi harus maju 5 langkah, belok kanan, lalu maju 5 langkah lagi, hanya dengan 4 blok. Rahasianya: letakkan blok Ulangi DI DALAM blok Ulangi lain! Ketuk loop luar untuk memilihnya, lalu tambahkan loop kedua ke dalamnya.",
+        startDir: 'UP',
+        map: [
+            ".######",
+            ".....G#",
+            ".#.####",
+            ".#.####",
+            ".#.####",
+            ".######",
+            "S######"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop'],
+        maxBlocks: 4,
+        debuggingSetup: null,
+        insight: "Perulangan bersarang (nested loop) berarti loop di dalam loop. Loop dalam berjalan penuh setiap kali loop luar berputar satu kali, sehingga program menjadi sangat ringkas."
+    },
+    17: {
+        id: 17,
+        badge: "cond",
+        title: "Misi 17: Sensor yang Rusak",
+        concept: "Konsep: Kondisional + Sekuensial",
+        instruction: "Dua ubin sensor masih berfungsi, tetapi sensor di tikungan terakhir rusak! Biarkan sensor memandu Albi di awal rute, lalu ambil alih kemudi secara manual setelah perulangan selesai.",
+        startDir: 'UP',
+        map: [
+            "###...G",
+            ".##.###",
+            ".##.###",
+            "Y..P..#",
+            ".######",
+            ".######",
+            "S######"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop', 'if-yellow', 'if-purple'],
+        maxBlocks: 7,
+        debuggingSetup: null,
+        insight: "Program yang baik tidak bergantung pada satu cara saja. Ketika otomatisasi (sensor) tidak tersedia, kita menambahkan instruksi manual yang tepat setelahnya."
+    },
+    18: {
+        id: 18,
+        badge: "debug",
+        title: "Misi 18: Bug Bersarang",
+        concept: "Konsep: Debugging Perulangan Bersarang",
+        instruction: "Program loop bersarang ini memiliki DUA bug: jumlah ulangan yang keliru dan arah belokan yang salah. Albi harus berkeliling tiga sisi laboratorium. Perbaiki kedua bug tersebut!",
+        startDir: 'UP',
+        map: [
+            ".######",
+            ".......",
+            ".##.#.#",
+            ".##.#.#",
+            ".####.#",
+            ".####.#",
+            "S####G#"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop'],
+        maxBlocks: 4,
+        debuggingSetup: [
+            { type: 'loop', loopCount: 3, children: [{ type: 'loop', loopCount: 4, children: [{ type: 'move' }] }, { type: 'turn-left' }] }
+        ],
+        insight: "Satu program bisa memiliki lebih dari satu bug. Perbaiki satu per satu, jalankan ulang setiap selesai memperbaiki, dan amati apakah robot bergerak lebih jauh dari sebelumnya."
+    },
+    19: {
+        id: 19,
+        badge: "loop",
+        title: "Misi 19: Tangga Raksasa",
+        concept: "Konsep: Efisiensi Perulangan",
+        instruction: "Tangga ini memiliki anak tangga selebar 2 langkah. Ada lorong buntu yang menjebak! Temukan pola satu anak tangga, lalu ulangi secukupnya untuk mencapai portal dalam 7 blok.",
+        startDir: 'UP',
+        map: [
+            "####..G",
+            "####.##",
+            "#.....#",
+            ".#.####",
+            "....###",
+            ".######",
+            "S######"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop'],
+        maxBlocks: 7,
+        debuggingSetup: null,
+        insight: "Satu putaran loop boleh berisi banyak perintah. Yang penting, isi loop menggambarkan satu pola lengkap yang kemudian berulang dengan sama persis."
+    },
+    20: {
+        id: 20,
+        badge: "cond",
+        title: "Misi 20: Ular Sensor Panjang",
+        concept: "Konsep: Kondisional + Perulangan Bersarang",
+        instruction: "Rute sensor ini membutuhkan 12 langkah, lebih dari batas pilihan satu blok Ulangi! Gunakan perulangan bersarang agar pola Maju-Jika Kuning-Jika Ungu diulang cukup banyak dengan hanya 5 blok.",
+        startDir: 'UP',
+        map: [
+            "######G",
+            "###.##.",
+            "###Y..P",
+            ".##.###",
+            "Y..P..#",
+            ".######",
+            "S######"
+        ],
+        allowedBlocks: ['move', 'loop', 'if-yellow', 'if-purple'],
+        maxBlocks: 5,
+        debuggingSetup: null,
+        insight: "Loop bersarang mengalikan jumlah pengulangan: Ulangi 2x berisi Ulangi 6x menjalankan isinya 2 x 6 = 12 kali. Ini cara cerdas mengatasi batasan."
+    },
+    // --- TINGKAT MASTER (Misi 21 - 25): peta 8x8 dengan lorong buntu ---
+    21: {
+        id: 21,
+        badge: "loop",
+        title: "Misi 21: Labirin Master",
+        concept: "Konsep: Perulangan Bersarang Lanjutan",
+        instruction: "Tingkat Master! Peta 8x8 penuh lorong buntu. Rute Albi berbentuk tangga besar dengan anak tangga 3 langkah. Gunakan perulangan bersarang untuk menyelesaikannya dalam 7 blok saja!",
+        startDir: 'UP',
+        map: [
+            "###.####",
+            "###...G.",
+            "###.####",
+            ".##.####",
+            "......##",
+            ".#######",
+            ".#######",
+            "S..#####"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop'],
+        maxBlocks: 7,
+        debuggingSetup: null,
+        insight: "Loop bersarang tidak hanya untuk satu perintah. Di dalam loop luar bisa terdapat beberapa loop dalam sekaligus, masing-masing menangani bagian pola yang berbeda."
+    },
+    22: {
+        id: 22,
+        badge: "cond",
+        title: "Misi 22: Cermin Sensor",
+        concept: "Konsep: Kondisional Master",
+        instruction: "Kali ini Albi mulai dari pojok KANAN bawah dan harus bergerak ke kiri atas. Ubin ungu dan kuning akan memandunya. Gunakan perulangan bersarang dan sensor untuk mencapai portal dalam 5 blok!",
+        startDir: 'UP',
+        map: [
+            "#G######",
+            ".Y.P####",
+            "###.#.##",
+            "#..Y.P##",
+            "#####.#.",
+            "###..Y.P",
+            "#######.",
+            "#######S"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop', 'if-yellow', 'if-purple'],
+        maxBlocks: 5,
+        debuggingSetup: null,
+        insight: "Program yang sama (Maju, Jika Kuning, Jika Ungu) bisa menyelesaikan rute yang sangat berbeda. Inilah kekuatan algoritma umum: logikanya tetap, datanya yang berubah."
+    },
+    23: {
+        id: 23,
+        badge: "debug",
+        title: "Misi 23: Detektif Kode",
+        concept: "Konsep: Debugging Master",
+        instruction: "Program ini ditulis terburu-buru: jumlah ulangan dan arah kedua belokannya keliru. Telusuri rute Albi, bandingkan dengan program, dan perbaiki semua bug-nya!",
+        startDir: 'UP',
+        map: [
+            "###G####",
+            "##...###",
+            "#..#####",
+            "#...####",
+            "..######",
+            "....####",
+            ".#######",
+            "S#######"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop'],
+        maxBlocks: 7,
+        debuggingSetup: [
+            { type: 'loop', loopCount: 2, children: [{ type: 'loop', loopCount: 2, children: [{ type: 'move' }] }, { type: 'turn-left' }, { type: 'move' }, { type: 'turn-right' }] },
+            { type: 'move' }
+        ],
+        insight: "Detektif kode bekerja dengan membandingkan apa yang SEHARUSNYA terjadi dengan apa yang BENAR-BENAR terjadi. Selisih keduanya menunjukkan letak bug."
+    },
+    24: {
+        id: 24,
+        badge: "cond",
+        title: "Misi 24: Gabungan Sempurna",
+        concept: "Konsep: Kondisional + Perulangan + Sekuensial",
+        instruction: "Sensor memandu Albi melewati bagian pertama rute, tetapi lorong panjang menuju portal tidak memiliki sensor. Gabungkan perulangan bersensor, belokan manual, dan perulangan kedua untuk lorong panjang!",
+        startDir: 'UP',
+        map: [
+            "###.####",
+            "##.....G",
+            ".##.####",
+            ".##.####",
+            "Y..P..##",
+            ".#######",
+            ".#######",
+            "S#######"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop', 'if-yellow', 'if-purple'],
+        maxBlocks: 7,
+        debuggingSetup: null,
+        insight: "Menggabungkan beberapa struktur kontrol secara berurutan adalah inti pemrograman: setiap bagian program menyelesaikan satu sub-masalah, lalu menyerahkan hasilnya ke bagian berikutnya."
+    },
+    25: {
+        id: 25,
+        badge: "cond",
+        title: "Misi 25: Ujian Akhir Albi",
+        concept: "Konsep: Algoritma Master Lengkap",
+        instruction: "Misi terakhir! Bagian pertama dipandu sensor, sedangkan bagian kedua berupa pola 'belok kanan lalu maju 3 langkah' yang terjadi dua kali. Gunakan SEMUA kemampuanmu untuk mencapai portal dalam 8 blok!",
+        startDir: 'UP',
+        map: [
+            "####.###",
+            "####....",
+            "##.#.#..",
+            "##Y.P...",
+            ".#.####G",
+            "Y.P.###.",
+            ".#######",
+            "S#######"
+        ],
+        allowedBlocks: ['move', 'turn-left', 'turn-right', 'loop', 'if-yellow', 'if-purple'],
+        maxBlocks: 8,
+        debuggingSetup: null,
+        insight: "Selamat! Kamu telah menguasai sekuensial, perulangan, perulangan bersarang, kondisional, dan debugging. Inilah fondasi yang dipakai di semua bahasa pemrograman di dunia."
     }
 };
+
+// Level 11-25 ditulis sebagai peta teks agar mudah dibaca dan diubah guru.
+// Simbol peta: # dinding, . lantai, S posisi awal Albi, G portal, Y sensor kuning, P sensor ungu
+function buildLevelFromMap(lvl) {
+    lvl.gridSize = lvl.map.length;
+    lvl.walls = [];
+    lvl.yellowTiles = [];
+    lvl.purpleTiles = [];
+    lvl.map.forEach((row, y) => {
+        row.split('').forEach((cell, x) => {
+            if (cell === '#') lvl.walls.push({ x, y });
+            if (cell === 'S') lvl.start = { x, y, dir: lvl.startDir || 'UP' };
+            if (cell === 'G') lvl.goal = { x, y };
+            if (cell === 'Y') lvl.yellowTiles.push({ x, y });
+            if (cell === 'P') lvl.purpleTiles.push({ x, y });
+        });
+    });
+}
+Object.values(LEVELS).forEach(lvl => {
+    if (lvl.map) buildLevelFromMap(lvl);
+});
+
+const TOTAL_MAZE_LEVELS = Object.keys(LEVELS).length;
+
+// Tingkat kesulitan: setiap 5 level (berlaku untuk Mode Maze dan Puzzle)
+const LEVEL_TIERS = [
+    { name: 'Pemula', icon: '🌱' },
+    { name: 'Dasar', icon: '📘' },
+    { name: 'Menengah', icon: '⚙️' },
+    { name: 'Mahir', icon: '🚀' },
+    { name: 'Master', icon: '👑' }
+];
+
+function getLevelTier(levelId) {
+    return LEVEL_TIERS[Math.min(Math.ceil(levelId / 5), LEVEL_TIERS.length) - 1];
+}
 
 // Quiz Questions
 const QUIZ_QUESTIONS = [
@@ -401,8 +780,10 @@ const QUIZ_QUESTIONS = [
 
 // Puzzle Levels Definitions
 const PUZZLE_LEVELS = {
+    // --- TINGKAT PEMULA (Teka-Teki 1 - 5) & DASAR (Teka-Teki 6 - 10) ---
     1: {
         id: 1,
+        badge: "seq",
         title: "Teka-Teki 1: Urutan Pagi Hari",
         concept: "Konsep: Sekuensial",
         instruction: "Urutkan aktivitas pagi hari dari bangun tidur hingga pergi ke sekolah agar membentuk algoritma harian yang logis!",
@@ -411,10 +792,13 @@ const PUZZLE_LEVELS = {
             { id: "p1-2", text: "Mandi Pagi", correctOrder: 1 },
             { id: "p1-3", text: "Sarapan Pagi", correctOrder: 2 },
             { id: "p1-4", text: "Pergi ke Sekolah", correctOrder: 3 }
-        ]
+        ],
+        // Mandi dan sarapan boleh ditukar urutannya
+        altOrders: [["p1-1", "p1-3", "p1-2", "p1-4"]]
     },
     2: {
         id: 2,
+        badge: "seq",
         title: "Teka-Teki 2: Membuat Teh Hangat",
         concept: "Konsep: Algoritma Sekuensial",
         instruction: "Urutkan langkah-langkah membuat secangkir teh hangat manis secara tepat!",
@@ -423,10 +807,13 @@ const PUZZLE_LEVELS = {
             { id: "p2-2", text: "Tuangkan Air Panas Secukupnya", correctOrder: 1 },
             { id: "p2-3", text: "Aduk Air Hingga Gula Larut", correctOrder: 2 },
             { id: "p2-4", text: "Secangkir Teh Hangat Siap Dinikmati", correctOrder: 3 }
-        ]
+        ],
+        // Air panas boleh dituang lebih dulu sebelum teh & gula dimasukkan
+        altOrders: [["p2-2", "p2-1", "p2-3", "p2-4"]]
     },
     3: {
         id: 3,
+        badge: "cond",
         title: "Teka-Teki 3: Menyeberang Jalan",
         concept: "Konsep: Kondisional (If-Else)",
         instruction: "Bantu Albi mengambil keputusan aman untuk menyeberang jalan berdasarkan warna lampu lalu lintas!",
@@ -440,6 +827,7 @@ const PUZZLE_LEVELS = {
     },
     4: {
         id: 4,
+        badge: "loop",
         title: "Teka-Teki 4: Mengambil Sampah Berulang",
         concept: "Konsep: Perulangan (Loop)",
         instruction: "Susun perintah loop untuk mengambil 3 buah botol plastik di lantai secara otomatis!",
@@ -452,6 +840,7 @@ const PUZZLE_LEVELS = {
     },
     5: {
         id: 5,
+        badge: "debug",
         title: "Teka-Teki 5: Logika Terbesar (Master)",
         concept: "Konsep: Logika Kompleks",
         instruction: "Urutkan jalannya algoritma untuk membandingkan dua angka A dan B, lalu mencetak nilai yang paling besar!",
@@ -466,6 +855,7 @@ const PUZZLE_LEVELS = {
     },
     6: {
         id: 6,
+        badge: "seq",
         title: "Teka-Teki 6: Membaca Buku Perpustakaan",
         concept: "Konsep: Sekuensial Lanjutan",
         instruction: "Urutkan prosedur standar saat berkunjung ke perpustakaan untuk meminjam dan membaca buku secara logis!",
@@ -478,6 +868,7 @@ const PUZZLE_LEVELS = {
     },
     7: {
         id: 7,
+        badge: "cond",
         title: "Teka-Teki 7: Verifikasi Akun Baru",
         concept: "Konsep: Kondisional Bersarang",
         instruction: "Urutkan langkah login aplikasi dengan pengecekan username dan password!",
@@ -491,6 +882,7 @@ const PUZZLE_LEVELS = {
     },
     8: {
         id: 8,
+        badge: "loop",
         title: "Teka-Teki 8: Menyiram Tanaman Berulang",
         concept: "Konsep: Loop Tingkat Lanjut",
         instruction: "Susun loop untuk menyiram 5 pot tanaman bunga di kebun secara teratur!",
@@ -503,6 +895,7 @@ const PUZZLE_LEVELS = {
     },
     9: {
         id: 9,
+        badge: "cond",
         title: "Teka-Teki 9: Membuat Telur Rebus",
         concept: "Konsep: Pemantauan Kondisi",
         instruction: "Urutkan proses merebus telur setengah matang dengan batasan sensor waktu!",
@@ -516,6 +909,7 @@ const PUZZLE_LEVELS = {
     },
     10: {
         id: 10,
+        badge: "loop",
         title: "Teka-Teki 10: Pencarian Linear Master",
         concept: "Konsep: Logika Pencarian (Search)",
         instruction: "Urutkan logika pencarian linear untuk menemukan angka target di dalam sebuah barisan acak!",
@@ -527,6 +921,279 @@ const PUZZLE_LEVELS = {
             { id: "p10-5", text: "Jika Seluruh Barisan Selesai Dicek & Tidak Ada:", correctOrder: 4 },
             { id: "p10-6", text: "  Tampilkan 'Target Tidak Ada' dan Selesai", correctOrder: 5 }
         ]
+    },
+    // --- TINGKAT MENENGAH (Teka-Teki 11 - 15) ---
+    11: {
+        id: 11,
+        badge: "seq",
+        title: "Teka-Teki 11: Mencuci Tangan dengan Benar",
+        concept: "Konsep: Sekuensial",
+        instruction: "Urutkan langkah mencuci tangan yang benar agar kuman hilang sepenuhnya!",
+        blocks: [
+            { id: "p11-1", text: "Basahi Tangan dengan Air Mengalir", correctOrder: 0 },
+            { id: "p11-2", text: "Tuangkan Sabun ke Telapak Tangan", correctOrder: 1 },
+            { id: "p11-3", text: "Gosok Seluruh Bagian Tangan Selama 20 Detik", correctOrder: 2 },
+            { id: "p11-4", text: "Bilas Tangan Hingga Bersih dari Sabun", correctOrder: 3 },
+            { id: "p11-5", text: "Keringkan Tangan dengan Handuk Bersih", correctOrder: 4 }
+        ],
+        insight: "Urutan sangat menentukan hasil. Membilas sebelum memakai sabun tidak akan membersihkan kuman, sama seperti program yang urutannya salah tidak akan memberi hasil yang benar."
+    },
+    12: {
+        id: 12,
+        badge: "seq",
+        title: "Teka-Teki 12: Mengirim Email Tugas",
+        concept: "Konsep: Sekuensial",
+        instruction: "Bantu Albi mengirim tugas sekolah kepada guru melalui email. Urutkan langkahnya!",
+        blocks: [
+            { id: "p12-1", text: "Buka Aplikasi Email", correctOrder: 0 },
+            { id: "p12-2", text: "Klik Tombol 'Tulis Email Baru'", correctOrder: 1 },
+            { id: "p12-3", text: "Isi Alamat Email Guru", correctOrder: 2 },
+            { id: "p12-4", text: "Tulis Subjek dan Isi Pesan", correctOrder: 3 },
+            { id: "p12-5", text: "Lampirkan File Tugas", correctOrder: 4 },
+            { id: "p12-6", text: "Klik Tombol 'Kirim'", correctOrder: 5 }
+        ],
+        altOrders: [
+            ["p12-1", "p12-2", "p12-4", "p12-3", "p12-5", "p12-6"],
+            ["p12-1", "p12-2", "p12-3", "p12-5", "p12-4", "p12-6"],
+            ["p12-1", "p12-2", "p12-4", "p12-5", "p12-3", "p12-6"],
+            ["p12-1", "p12-2", "p12-5", "p12-3", "p12-4", "p12-6"],
+            ["p12-1", "p12-2", "p12-5", "p12-4", "p12-3", "p12-6"]
+        ],
+        insight: "Beberapa langkah boleh ditukar urutannya selama tidak saling bergantung (misalnya mengisi alamat dan subjek). Tetapi langkah 'Kirim' harus selalu paling akhir!"
+    },
+    13: {
+        id: 13,
+        badge: "cond",
+        title: "Teka-Teki 13: Lampu Lalu Lintas Kendaraan",
+        concept: "Konsep: Kondisional Bertingkat",
+        instruction: "Albi mengemudikan mobil. Susun logika JIKA - SEBALIKNYA JIKA - SEBALIKNYA untuk ketiga warna lampu lalu lintas!",
+        blocks: [
+            { id: "p13-1", text: "Lihat Warna Lampu Lalu Lintas", correctOrder: 0 },
+            { id: "p13-2", text: "JIKA Lampu Merah:", correctOrder: 1 },
+            { id: "p13-3", text: "  Hentikan Mobil di Belakang Garis", correctOrder: 2 },
+            { id: "p13-4", text: "SEBALIKNYA JIKA Lampu Kuning:", correctOrder: 3 },
+            { id: "p13-5", text: "  Kurangi Kecepatan dan Bersiap Berhenti", correctOrder: 4 },
+            { id: "p13-6", text: "SEBALIKNYA (Lampu Hijau):", correctOrder: 5 },
+            { id: "p13-7", text: "  Jalankan Mobil dengan Hati-Hati", correctOrder: 6 }
+        ],
+        insight: "Kondisional bertingkat (else-if) dipakai ketika ada lebih dari dua kemungkinan. Komputer mengecek kondisi dari atas ke bawah dan berhenti di kondisi pertama yang benar."
+    },
+    14: {
+        id: 14,
+        badge: "loop",
+        title: "Teka-Teki 14: Hitung Mundur Roket",
+        concept: "Konsep: Perulangan dengan Kondisi",
+        instruction: "Susun algoritma hitung mundur peluncuran roket dari angka 10 sampai 1!",
+        blocks: [
+            { id: "p14-1", text: "Simpan Angka 10 ke Variabel Hitungan", correctOrder: 0 },
+            { id: "p14-2", text: "Ulangi Selama Hitungan Lebih dari 0:", correctOrder: 1 },
+            { id: "p14-3", text: "  Tampilkan Nilai Hitungan ke Layar", correctOrder: 2 },
+            { id: "p14-4", text: "  Kurangi Hitungan Sebanyak 1", correctOrder: 3 },
+            { id: "p14-5", text: "Tampilkan 'Roket Meluncur!'", correctOrder: 4 }
+        ],
+        insight: "Perulangan 'selama' (while) terus berjalan selama kondisinya benar. Jika nilai hitungan tidak pernah dikurangi, perulangan tidak akan berhenti (infinite loop)!"
+    },
+    15: {
+        id: 15,
+        badge: "loop",
+        title: "Teka-Teki 15: Menabung Setiap Hari",
+        concept: "Konsep: Perulangan dan Variabel",
+        instruction: "Albi menabung Rp5.000 setiap hari selama seminggu. Urutkan algoritma untuk menghitung total tabungannya!",
+        blocks: [
+            { id: "p15-1", text: "Siapkan Celengan Kosong (Saldo = 0)", correctOrder: 0 },
+            { id: "p15-2", text: "Ulangi 7 Kali (Setiap Hari):", correctOrder: 1 },
+            { id: "p15-3", text: "  Masukkan Rp5.000 ke Celengan", correctOrder: 2 },
+            { id: "p15-4", text: "  Saldo = Saldo + 5.000", correctOrder: 3 },
+            { id: "p15-5", text: "Tampilkan Total Saldo Tabungan", correctOrder: 4 }
+        ],
+        altOrders: [
+            ["p15-1", "p15-2", "p15-4", "p15-3", "p15-5"]
+        ],
+        insight: "Variabel seperti 'Saldo' menyimpan nilai yang terus berubah di dalam perulangan. Nilai awal harus diatur SEBELUM perulangan dimulai."
+    },
+    // --- TINGKAT MAHIR (Teka-Teki 16 - 20) ---
+    16: {
+        id: 16,
+        badge: "cond",
+        title: "Teka-Teki 16: Absensi Kelas Otomatis",
+        concept: "Konsep: Kondisional di Dalam Perulangan",
+        instruction: "Bantu wali kelas membuat algoritma absensi untuk setiap siswa di kelas!",
+        blocks: [
+            { id: "p16-1", text: "Buka Daftar Hadir Kelas", correctOrder: 0 },
+            { id: "p16-2", text: "Untuk Setiap Siswa di Daftar:", correctOrder: 1 },
+            { id: "p16-3", text: "  JIKA Siswa Hadir:", correctOrder: 2 },
+            { id: "p16-4", text: "    Beri Tanda Centang (Hadir)", correctOrder: 3 },
+            { id: "p16-5", text: "  SEBALIKNYA:", correctOrder: 4 },
+            { id: "p16-6", text: "    Tulis Keterangan 'Tidak Hadir'", correctOrder: 5 },
+            { id: "p16-7", text: "Simpan dan Kirim Rekap Absensi", correctOrder: 6 }
+        ],
+        insight: "Menggabungkan perulangan dan kondisional memungkinkan komputer memproses banyak data sekaligus sambil mengambil keputusan berbeda untuk setiap data."
+    },
+    17: {
+        id: 17,
+        badge: "loop",
+        title: "Teka-Teki 17: Menghitung Nilai Rata-Rata",
+        concept: "Konsep: Akumulasi dalam Perulangan",
+        instruction: "Urutkan algoritma untuk menghitung nilai rata-rata ulangan seluruh siswa!",
+        blocks: [
+            { id: "p17-1", text: "Siapkan Daftar Nilai Ulangan", correctOrder: 0 },
+            { id: "p17-2", text: "Total = 0", correctOrder: 1 },
+            { id: "p17-3", text: "Untuk Setiap Nilai di Daftar:", correctOrder: 2 },
+            { id: "p17-4", text: "  Total = Total + Nilai", correctOrder: 3 },
+            { id: "p17-5", text: "Rata-Rata = Total : Jumlah Siswa", correctOrder: 4 },
+            { id: "p17-6", text: "Tampilkan Nilai Rata-Rata", correctOrder: 5 }
+        ],
+        altOrders: [
+            ["p17-2", "p17-1", "p17-3", "p17-4", "p17-5", "p17-6"]
+        ],
+        insight: "Pola akumulasi (menjumlahkan sedikit demi sedikit di dalam loop) adalah salah satu pola algoritma yang paling sering dipakai, misalnya di aplikasi kasir dan rapor digital."
+    },
+    18: {
+        id: 18,
+        badge: "cond",
+        title: "Teka-Teki 18: Kelulusan KKM",
+        concept: "Konsep: Kondisional dengan Perbandingan",
+        instruction: "Susun algoritma untuk menentukan apakah siswa lulus KKM (nilai minimal 75) atau perlu remedial!",
+        blocks: [
+            { id: "p18-1", text: "Baca Nilai Ujian Siswa", correctOrder: 0 },
+            { id: "p18-2", text: "JIKA Nilai Lebih dari atau Sama dengan 75:", correctOrder: 1 },
+            { id: "p18-3", text: "  Tampilkan 'Selamat, Kamu Lulus!'", correctOrder: 2 },
+            { id: "p18-4", text: "SEBALIKNYA:", correctOrder: 3 },
+            { id: "p18-5", text: "  Tampilkan 'Ikuti Remedial'", correctOrder: 4 },
+            { id: "p18-6", text: "Simpan Hasil ke Rapor Digital", correctOrder: 5 }
+        ],
+        insight: "Kondisi dalam program sering berupa perbandingan (lebih dari, kurang dari, sama dengan). Hasil perbandingan selalu bernilai Benar atau Salah."
+    },
+    19: {
+        id: 19,
+        badge: "cond",
+        title: "Teka-Teki 19: Permainan Tebak Angka",
+        concept: "Konsep: Perulangan Sampai Berhasil",
+        instruction: "Komputer menyimpan angka rahasia. Susun algoritma permainan tebak angka yang memberi petunjuk!",
+        blocks: [
+            { id: "p19-1", text: "Komputer Memilih Angka Rahasia", correctOrder: 0 },
+            { id: "p19-2", text: "Ulangi Sampai Tebakan Benar:", correctOrder: 1 },
+            { id: "p19-3", text: "  Minta Pemain Memasukkan Tebakan", correctOrder: 2 },
+            { id: "p19-4", text: "  JIKA Tebakan Lebih Kecil dari Angka Rahasia:", correctOrder: 3 },
+            { id: "p19-5", text: "    Tampilkan 'Terlalu Kecil!'", correctOrder: 4 },
+            { id: "p19-6", text: "  JIKA Tebakan Lebih Besar dari Angka Rahasia:", correctOrder: 5 },
+            { id: "p19-7", text: "    Tampilkan 'Terlalu Besar!'", correctOrder: 6 },
+            { id: "p19-8", text: "Tampilkan 'Selamat, Tebakanmu Benar!'", correctOrder: 7 }
+        ],
+        altOrders: [
+            ["p19-1", "p19-2", "p19-3", "p19-6", "p19-7", "p19-4", "p19-5", "p19-8"]
+        ],
+        insight: "Perulangan 'sampai' (repeat-until) dipakai ketika kita tidak tahu berapa kali harus mengulang. Program berhenti tepat ketika kondisi tujuan tercapai."
+    },
+    20: {
+        id: 20,
+        badge: "cond",
+        title: "Teka-Teki 20: Mencari Nilai Terbesar",
+        concept: "Konsep: Algoritma Pencarian Maksimum",
+        instruction: "Urutkan algoritma untuk menemukan nilai tertinggi di kelas dari sebuah daftar nilai!",
+        blocks: [
+            { id: "p20-1", text: "Ambil Nilai Pertama, Simpan Sebagai Terbesar", correctOrder: 0 },
+            { id: "p20-2", text: "Untuk Setiap Nilai Berikutnya di Daftar:", correctOrder: 1 },
+            { id: "p20-3", text: "  JIKA Nilai Ini Lebih Besar dari Terbesar:", correctOrder: 2 },
+            { id: "p20-4", text: "    Ganti Terbesar dengan Nilai Ini", correctOrder: 3 },
+            { id: "p20-5", text: "Tampilkan Nilai Terbesar", correctOrder: 4 }
+        ],
+        insight: "Algoritma pencarian nilai maksimum membandingkan setiap data dengan 'juara sementara'. Jika ada yang lebih besar, juaranya diganti. Di akhir, juara sementara adalah jawabannya."
+    },
+    // --- TINGKAT MASTER (Teka-Teki 21 - 25) ---
+    21: {
+        id: 21,
+        badge: "cond",
+        title: "Teka-Teki 21: Mesin ATM",
+        concept: "Konsep: Kondisional Bersarang",
+        instruction: "Susun algoritma mesin ATM yang memeriksa PIN dan saldo sebelum mengeluarkan uang!",
+        blocks: [
+            { id: "p21-1", text: "Masukkan Kartu ATM", correctOrder: 0 },
+            { id: "p21-2", text: "Masukkan Nomor PIN", correctOrder: 1 },
+            { id: "p21-3", text: "JIKA PIN Benar:", correctOrder: 2 },
+            { id: "p21-4", text: "  Pilih Jumlah Uang yang Ingin Diambil", correctOrder: 3 },
+            { id: "p21-5", text: "  JIKA Saldo Mencukupi:", correctOrder: 4 },
+            { id: "p21-6", text: "    Keluarkan Uang dan Cetak Struk", correctOrder: 5 },
+            { id: "p21-7", text: "  SEBALIKNYA:", correctOrder: 6 },
+            { id: "p21-8", text: "    Tampilkan 'Saldo Tidak Cukup'", correctOrder: 7 },
+            { id: "p21-9", text: "SEBALIKNYA:", correctOrder: 8 },
+            { id: "p21-10", text: "  Tampilkan 'PIN Salah' dan Kembalikan Kartu", correctOrder: 9 }
+        ],
+        insight: "Kondisional bersarang (if di dalam if) dipakai saat sebuah keputusan baru boleh diambil setelah keputusan sebelumnya terpenuhi, seperti saldo baru dicek setelah PIN benar."
+    },
+    22: {
+        id: 22,
+        badge: "loop",
+        title: "Teka-Teki 22: Mengurutkan Kartu (Bubble Sort)",
+        concept: "Konsep: Algoritma Pengurutan",
+        instruction: "Albi ingin mengurutkan kartu angka dari kecil ke besar dengan cara Bubble Sort. Susun algoritmanya!",
+        blocks: [
+            { id: "p22-1", text: "Jajarkan Kartu Angka Secara Acak", correctOrder: 0 },
+            { id: "p22-2", text: "Ulangi Sampai Tidak Ada Kartu yang Ditukar:", correctOrder: 1 },
+            { id: "p22-3", text: "  Untuk Setiap Pasangan Kartu Bersebelahan:", correctOrder: 2 },
+            { id: "p22-4", text: "    JIKA Kartu Kiri Lebih Besar dari Kartu Kanan:", correctOrder: 3 },
+            { id: "p22-5", text: "      Tukar Posisi Kedua Kartu", correctOrder: 4 },
+            { id: "p22-6", text: "Kartu Sudah Terurut dari Kecil ke Besar!", correctOrder: 5 }
+        ],
+        insight: "Bubble Sort membandingkan pasangan yang bersebelahan dan menukarnya bila urutannya salah. Angka besar perlahan 'menggelembung' ke kanan, seperti gelembung naik ke permukaan."
+    },
+    23: {
+        id: 23,
+        badge: "loop",
+        title: "Teka-Teki 23: Tabel Perkalian",
+        concept: "Konsep: Perulangan Bersarang",
+        instruction: "Susun algoritma untuk mencetak tabel perkalian 1 sampai 5 menggunakan loop bersarang!",
+        blocks: [
+            { id: "p23-1", text: "Untuk Setiap Baris dari 1 Sampai 5:", correctOrder: 0 },
+            { id: "p23-2", text: "  Untuk Setiap Kolom dari 1 Sampai 5:", correctOrder: 1 },
+            { id: "p23-3", text: "    Tulis Hasil Baris × Kolom", correctOrder: 2 },
+            { id: "p23-4", text: "  Pindah ke Baris Baru", correctOrder: 3 },
+            { id: "p23-5", text: "Tabel Perkalian Selesai Dicetak!", correctOrder: 4 }
+        ],
+        insight: "Pada loop bersarang, loop dalam (kolom) berjalan penuh untuk setiap satu putaran loop luar (baris). 5 baris × 5 kolom menghasilkan 25 hasil perkalian."
+    },
+    24: {
+        id: 24,
+        badge: "debug",
+        title: "Teka-Teki 24: Pencarian Biner",
+        concept: "Konsep: Algoritma Pencarian Efisien",
+        instruction: "Cari sebuah angka di daftar yang sudah terurut dengan cara membagi dua daftar berulang kali. Susun algoritma pencarian biner!",
+        blocks: [
+            { id: "p24-1", text: "Pastikan Daftar Angka Sudah Terurut", correctOrder: 0 },
+            { id: "p24-2", text: "Tentukan Batas Kiri dan Batas Kanan Daftar", correctOrder: 1 },
+            { id: "p24-3", text: "Ulangi Selama Batas Kiri Tidak Melewati Batas Kanan:", correctOrder: 2 },
+            { id: "p24-4", text: "  Ambil Angka di Posisi Tengah", correctOrder: 3 },
+            { id: "p24-5", text: "  JIKA Angka Tengah Sama dengan Target:", correctOrder: 4 },
+            { id: "p24-6", text: "    Tampilkan 'Ditemukan!' dan Berhenti", correctOrder: 5 },
+            { id: "p24-7", text: "  SEBALIKNYA JIKA Angka Tengah Lebih Kecil dari Target:", correctOrder: 6 },
+            { id: "p24-8", text: "    Geser Batas Kiri ke Sebelah Kanan Tengah", correctOrder: 7 },
+            { id: "p24-9", text: "  SEBALIKNYA:", correctOrder: 8 },
+            { id: "p24-10", text: "    Geser Batas Kanan ke Sebelah Kiri Tengah", correctOrder: 9 },
+            { id: "p24-11", text: "Tampilkan 'Angka Tidak Ditemukan'", correctOrder: 10 }
+        ],
+        insight: "Pencarian biner membuang separuh data di setiap langkah. Untuk 1.000 data, cukup sekitar 10 langkah, jauh lebih cepat daripada mengecek satu per satu (pencarian linear)."
+    },
+    25: {
+        id: 25,
+        badge: "debug",
+        title: "Teka-Teki 25: Tantangan FizzBuzz",
+        concept: "Konsep: Logika Master",
+        instruction: "Tantangan klasik programmer! Untuk angka 1 sampai 15: tampilkan 'Fizz' jika habis dibagi 3, 'Buzz' jika habis dibagi 5, dan 'FizzBuzz' jika habis dibagi keduanya. Susun logikanya!",
+        blocks: [
+            { id: "p25-1", text: "Untuk Setiap Angka dari 1 Sampai 15:", correctOrder: 0 },
+            { id: "p25-2", text: "  JIKA Habis Dibagi 3 dan 5:", correctOrder: 1 },
+            { id: "p25-3", text: "    Tampilkan 'FizzBuzz'", correctOrder: 2 },
+            { id: "p25-4", text: "  SEBALIKNYA JIKA Habis Dibagi 3:", correctOrder: 3 },
+            { id: "p25-5", text: "    Tampilkan 'Fizz'", correctOrder: 4 },
+            { id: "p25-6", text: "  SEBALIKNYA JIKA Habis Dibagi 5:", correctOrder: 5 },
+            { id: "p25-7", text: "    Tampilkan 'Buzz'", correctOrder: 6 },
+            { id: "p25-8", text: "  SEBALIKNYA:", correctOrder: 7 },
+            { id: "p25-9", text: "    Tampilkan Angka Itu Sendiri", correctOrder: 8 }
+        ],
+        altOrders: [
+            ["p25-1", "p25-2", "p25-3", "p25-6", "p25-7", "p25-4", "p25-5", "p25-8", "p25-9"]
+        ],
+        insight: "Urutan kondisi sangat penting! Jika 'habis dibagi 3' dicek lebih dulu, angka 15 akan menampilkan 'Fizz', bukan 'FizzBuzz'. Kondisi yang paling khusus harus dicek paling awal."
     }
 };
 
@@ -1046,7 +1713,8 @@ const PATTERN_LEVELS = {
 // Pattern Game State variables
 let currentPatternLevel = 1;
 let completedPatternLevels = [];
-let selectedPatternOption = null;
+let selectedPatternOption = null; // index of the option as displayed on screen
+let patternOptionOrder = []; // displayed position -> original index in lvl.options
 
 // Puzzle Game State variables
 let currentPuzzleLevel = 1;
@@ -1131,7 +1799,14 @@ function renderPuzzleLevelSelect() {
     dom.puzzleLevelSelect.innerHTML = '';
     const totalPuzzles = Object.keys(PUZZLE_LEVELS).length;
 
+    let group = null;
     for (let i = 1; i <= totalPuzzles; i++) {
+        if ((i - 1) % 5 === 0) {
+            const tier = getLevelTier(i);
+            group = document.createElement('optgroup');
+            group.label = `${tier.icon} ${tier.name}`;
+            dom.puzzleLevelSelect.appendChild(group);
+        }
         const opt = document.createElement('option');
         opt.value = i;
         const isUnlocked = isPuzzleLevelUnlocked(i);
@@ -1143,7 +1818,7 @@ function renderPuzzleLevelSelect() {
         if (i === currentPuzzleLevel) {
             opt.selected = true;
         }
-        dom.puzzleLevelSelect.appendChild(opt);
+        group.appendChild(opt);
     }
 }
 
@@ -1219,6 +1894,17 @@ let dragState = {
 
 let quizIndex = 0;
 let quizScore = 0;
+const QUIZ_PASS_SCORE = 3; // minimal jawaban benar untuk lulus kuis
+
+// Fisher-Yates shuffle: every ordering is equally likely (returns a new array)
+function shuffleArray(arr) {
+    const result = arr.slice();
+    for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+}
 
 // DOM Elements cache
 const dom = {
@@ -1433,7 +2119,7 @@ function setupEventListeners() {
     dom.modeCertBtn.addEventListener('click', () => {
         const totalPuzzles = Object.keys(PUZZLE_LEVELS).length;
         const totalPatterns = Object.keys(PATTERN_LEVELS).length;
-        const mazeDone = (new Set(completedLevels)).size >= 10;
+        const mazeDone = (new Set(completedLevels)).size >= TOTAL_MAZE_LEVELS;
         const puzzleDone = (new Set(completedPuzzleLevels)).size >= totalPuzzles;
         const patternDone = (new Set(completedPatternLevels)).size >= totalPatterns;
         const allDone = mazeDone && puzzleDone && patternDone;
@@ -1451,7 +2137,7 @@ function setupEventListeners() {
             }
         } else {
             synth.playWrong();
-            alert(`Sertifikat belum bisa diakses! Kamu harus menyelesaikan seluruh 10 Level Mode Labirin (Maze), ${totalPuzzles} Level Mode Teka-Teki (Puzzle), dan ${totalPatterns} Level Mode Pengenalan Pola (Pattern) terlebih dahulu.`);
+            alert(`Sertifikat belum bisa diakses! Kamu harus menyelesaikan seluruh ${TOTAL_MAZE_LEVELS} Level Mode Labirin (Maze), ${totalPuzzles} Level Mode Teka-Teki (Puzzle), dan ${totalPatterns} Level Mode Pengenalan Pola (Pattern) terlebih dahulu.`);
         }
     });
 
@@ -1616,8 +2302,17 @@ function renderLevelsSelector() {
     // Check if previous levels are completed to unlock the next one
     let allCompleted = true;
 
-    for (let id = 1; id <= 10; id++) {
+    for (let id = 1; id <= TOTAL_MAZE_LEVELS; id++) {
         const lvl = LEVELS[id];
+
+        // Tier heading every 5 levels (Pemula, Dasar, Menengah, Mahir, Master)
+        if ((id - 1) % 5 === 0) {
+            const tier = getLevelTier(id);
+            const heading = document.createElement('div');
+            heading.className = 'level-tier-heading';
+            heading.innerText = `${tier.icon} Tingkat ${tier.name} · Misi ${id} - ${Math.min(id + 4, TOTAL_MAZE_LEVELS)}`;
+            dom.levelsGrid.appendChild(heading);
+        }
         const isUnlocked = id === 1 || completedLevels.includes(id - 1);
         const isCompleted = completedLevels.includes(id);
 
@@ -1627,21 +2322,9 @@ function renderLevelsSelector() {
         card.className = `level-card glass-panel ${isUnlocked ? 'unlocked' : 'locked'} ${isCompleted ? 'completed' : ''}`;
         card.setAttribute('data-level', id);
 
-        // Map Level Badges
-        let badgeClass = 'seq';
-        if (id === 2) badgeClass = 'loop';
-        if (id === 3) badgeClass = 'cond';
-        if (id === 4) badgeClass = 'debug';
-        if (id === 5) badgeClass = 'loop';
-        if (id === 6) badgeClass = 'cond';
-        if (id === 7) badgeClass = 'loop';
-        if (id === 8) badgeClass = 'seq';
-        if (id === 9) badgeClass = 'debug';
-        if (id === 10) badgeClass = 'cond';
-
         card.innerHTML = `
             <div class="level-num">${id}</div>
-            <div class="level-badge ${badgeClass}">${lvl.concept.split(': ')[1]}</div>
+            <div class="level-badge ${lvl.badge}">${lvl.concept.split(': ')[1]}</div>
             <h3>${lvl.title}</h3>
             <p>${lvl.instruction}</p>
             <button class="btn btn-level-action" ${isUnlocked ? '' : 'disabled'}>
@@ -1661,7 +2344,7 @@ function renderLevelsSelector() {
 
     // Quiz Unlock Card Handling
     if (dom.quizLockedCard && dom.quizUnlockedCard) {
-        if (completedLevels.length >= 10) {
+        if ((new Set(completedLevels)).size >= TOTAL_MAZE_LEVELS) {
             dom.quizLockedCard.classList.add('hidden');
             dom.quizUnlockedCard.classList.remove('hidden');
         } else {
@@ -1680,20 +2363,10 @@ function loadLevel(levelId) {
     const lvl = LEVELS[levelId];
 
     dom.currentLevelTitle.innerText = lvl.title;
-    dom.currentLevelTag.innerText = lvl.concept;
+    dom.currentLevelTag.innerText = `${lvl.concept} · Tingkat ${getLevelTier(levelId).name}`;
 
     // Dynamic styles based on levels
-    dom.currentLevelTag.className = 'level-concept-tag';
-    if (levelId === 1) dom.currentLevelTag.classList.add('seq');
-    if (levelId === 2) dom.currentLevelTag.classList.add('loop');
-    if (levelId === 3) dom.currentLevelTag.classList.add('cond');
-    if (levelId === 4) dom.currentLevelTag.classList.add('debug');
-    if (levelId === 5) dom.currentLevelTag.classList.add('loop');
-    if (levelId === 6) dom.currentLevelTag.classList.add('cond');
-    if (levelId === 7) dom.currentLevelTag.classList.add('loop');
-    if (levelId === 8) dom.currentLevelTag.classList.add('seq');
-    if (levelId === 9) dom.currentLevelTag.classList.add('debug');
-    if (levelId === 10) dom.currentLevelTag.classList.add('cond');
+    dom.currentLevelTag.className = `level-concept-tag ${lvl.badge}`;
 
     dom.levelIntroText.innerText = lvl.instruction;
 
@@ -2208,6 +2881,8 @@ function handleWorkspaceDrop(targetParentId, insertIndex) {
     if (dragState.source === 'toolbox') {
         // Check block limit
         if (countTotalBlocks(workspaceBlocks) >= lvl.maxBlocks) {
+            synth.playWrong();
+            alert(`Batas maksimal blok untuk misi ini adalah ${lvl.maxBlocks} blok!`);
             return;
         }
         const newBlock = {
@@ -2231,6 +2906,13 @@ function handleWorkspaceDrop(targetParentId, insertIndex) {
         // Reordering: remove from old position, insert at new position
         const movingBlock = findBlockById(workspaceBlocks, dragState.id);
         if (!movingBlock) return;
+
+        // A loop cannot be dropped into itself or into one of its own children,
+        // otherwise the block would be removed and never re-inserted (lost).
+        if (targetParentId && (targetParentId === movingBlock.id || findBlockById(movingBlock.children || [], targetParentId))) {
+            synth.playWrong();
+            return;
+        }
 
         // Clone the block to re-insert
         const blockClone = JSON.parse(JSON.stringify(movingBlock));
@@ -2376,24 +3058,16 @@ function compileWorkspace(blocksArr) {
     let queue = [];
 
     blocksArr.forEach(block => {
-        if (block.type === 'move' || block.type === 'turn-left' || block.type === 'turn-right' || block.type === 'if-yellow' || block.type === 'if-purple') {
+        if (block.type === 'loop') {
+            // Unroll loops recursively so nested loops (loop inside loop) also run
+            for (let i = 0; i < block.loopCount; i++) {
+                queue = queue.concat(compileWorkspace(block.children || []));
+            }
+        } else {
             queue.push({
                 blockId: block.id,
                 type: block.type
             });
-        } else if (block.type === 'loop') {
-            // Unroll loops! Repeat nested contents loopCount times
-            for (let i = 0; i < block.loopCount; i++) {
-                if (block.children && block.children.length > 0) {
-                    block.children.forEach(child => {
-                        queue.push({
-                            blockId: child.id,
-                            parentLoopId: block.id, // reference parent loop
-                            type: child.type
-                        });
-                    });
-                }
-            }
         }
     });
 
@@ -2525,7 +3199,7 @@ function showSuccessModal() {
         loadLevel(currentLevel);
     };
 
-    if (currentLevel < 10) {
+    if (currentLevel < TOTAL_MAZE_LEVELS) {
         dom.successNextBtn.innerText = "Misi Berikutnya →";
         dom.successNextBtn.onclick = () => {
             synth.playClick();
@@ -2635,14 +3309,35 @@ function nextQuizQuestion() {
 }
 
 function finishQuiz() {
+    // Update progress bar to 100%
+    dom.quizProgressFill.style.width = `100%`;
+
+    const total = QUIZ_QUESTIONS.length;
+
+    if (quizScore < QUIZ_PASS_SCORE) {
+        synth.playFailure();
+        alert(`Nilai kuismu ${quizScore} dari ${total}. Kamu membutuhkan minimal ${QUIZ_PASS_SCORE} jawaban benar untuk lulus.\n\nPelajari kembali materinya, lalu coba kuis sekali lagi!`);
+        showScreen('landing-page');
+        updateCertificateCard();
+        return;
+    }
+
     synth.playSuccess();
     mazeQuizCompleted = true;
     saveProgress();
 
-    // Update progress bar to 100%
-    dom.quizProgressFill.style.width = `100%`;
+    const remaining = [];
+    if ((new Set(completedLevels)).size < Object.keys(LEVELS).length) remaining.push('Mode Labirin (Maze)');
+    if ((new Set(completedPuzzleLevels)).size < Object.keys(PUZZLE_LEVELS).length) remaining.push('Mode Teka-Teki (Puzzle)');
+    if ((new Set(completedPatternLevels)).size < Object.keys(PATTERN_LEVELS).length) remaining.push('Mode Pengenalan Pola');
 
-    alert("Selamat! Kamu telah menyelesaikan Kuis Algoritma Mode Labirin (Maze)! Selesaikan juga Mode Teka-Teki (Puzzle) untuk membuka Sertifikat Kelulusan di Menu Utama.");
+    let message = `Selamat, kamu LULUS Kuis Algoritma dengan nilai ${quizScore} dari ${total}!`;
+    if (remaining.length > 0) {
+        message += `\n\nSelesaikan juga ${remaining.join(' dan ')} untuk membuka Sertifikat Kelulusan di Menu Utama.`;
+    } else {
+        message += `\n\nSertifikat Kelulusan kini bisa diklaim melalui Menu Utama.`;
+    }
+    alert(message);
     showScreen('landing-page');
     updateCertificateCard();
 }
@@ -2659,27 +3354,32 @@ function loadPuzzleLevel(levelId) {
 
     dom.puzzleLevelTitle.innerText = lvl.title;
     dom.puzzleLevelTag.innerText = lvl.concept;
-    dom.puzzleLevelTag.className = 'level-concept-tag ' + (levelId === 3 ? 'cond' : (levelId === 4 ? 'loop' : (levelId === 5 ? 'debug' : 'seq')));
+    dom.puzzleLevelTag.className = `level-concept-tag ${lvl.badge || 'seq'}`;
     dom.puzzleIntroText.innerText = lvl.instruction;
-    dom.puzzleLevelCounter.innerText = `Teka-Teki ${levelId} dari ${Object.keys(PUZZLE_LEVELS).length}`;
+    dom.puzzleLevelCounter.innerText = `Teka-Teki ${levelId} dari ${Object.keys(PUZZLE_LEVELS).length} · Tingkat ${getLevelTier(levelId).name}`;
 
     // Scramble/Shuffle the blocks
-    puzzleBlocks = JSON.parse(JSON.stringify(lvl.blocks));
     do {
-        puzzleBlocks.sort(() => Math.random() - 0.5);
+        puzzleBlocks = shuffleArray(JSON.parse(JSON.stringify(lvl.blocks)));
     } while (isPuzzleAlreadyCorrect()); // make sure it's not already correct by accident
 
     renderPuzzleWorkspace();
     showScreen('puzzle-game-page');
 }
 
+// Main order (by correctOrder) plus any alternative orders that are also logical
+function getAcceptedPuzzleOrders(lvl) {
+    const mainOrder = lvl.blocks.slice()
+        .sort((a, b) => a.correctOrder - b.correctOrder)
+        .map(b => b.id);
+    return [mainOrder].concat(lvl.altOrders || []);
+}
+
 function isPuzzleAlreadyCorrect() {
-    for (let i = 0; i < puzzleBlocks.length; i++) {
-        if (puzzleBlocks[i].correctOrder !== i) {
-            return false;
-        }
-    }
-    return true;
+    const currentIds = puzzleBlocks.map(b => b.id);
+    return getAcceptedPuzzleOrders(PUZZLE_LEVELS[currentPuzzleLevel]).some(order =>
+        order.length === currentIds.length && order.every((id, i) => id === currentIds[i])
+    );
 }
 
 function renderPuzzleWorkspace() {
@@ -2688,9 +3388,10 @@ function renderPuzzleWorkspace() {
     puzzleBlocks.forEach((block, idx) => {
         const item = document.createElement('div');
         item.className = 'puzzle-block-item block-item block-action';
-        // Style based on content or level
-        if (block.text.startsWith('  ')) {
-            item.style.marginLeft = '20px';
+        // Indent nested steps: every 2 leading spaces = one level deeper
+        const indentLevel = Math.floor((block.text.length - block.text.trimStart().length) / 2);
+        if (indentLevel > 0) {
+            item.style.marginLeft = `${indentLevel * 20}px`;
         }
 
         item.innerHTML = `
@@ -2773,9 +3474,10 @@ function checkPuzzleSolution() {
         dom.successModalTitle.innerText = "Logika Algoritma Benar! 🎉";
         dom.successModalDesc.innerText = `Luar biasa! Kamu berhasil menyusun teka-teki logika ini secara runtut dan tepat.`;
         
-        let insight = "Algoritma harus runtut agar dapat dipahami dan dijalankan komputer dengan benar.";
-        if (currentPuzzleLevel === 3) insight = "Percabangan (If-Else) memungkinkan algoritma mengambil jalan berbeda tergantung pada kondisi luar.";
-        if (currentPuzzleLevel === 4) insight = "Perulangan (Loop) menyederhanakan kode yang berjalan berulang kali agar lebih efisien.";
+        const lvl = PUZZLE_LEVELS[currentPuzzleLevel];
+        let insight = lvl.insight || "Algoritma harus runtut agar dapat dipahami dan dijalankan komputer dengan benar.";
+        if (!lvl.insight && currentPuzzleLevel === 3) insight = "Percabangan (If-Else) memungkinkan algoritma mengambil jalan berbeda tergantung pada kondisi luar.";
+        if (!lvl.insight && currentPuzzleLevel === 4) insight = "Perulangan (Loop) menyederhanakan kode yang berjalan berulang kali agar lebih efisien.";
         dom.successLearningInsight.querySelector('span').innerText = insight;
 
         // Custom modal controls for Puzzle Mode
@@ -2790,7 +3492,7 @@ function checkPuzzleSolution() {
                 loadPuzzleLevel(currentPuzzleLevel + 1);
             } else {
                 // Done all puzzle levels!
-                alert("Selamat! Kamu menyelesaikan seluruh 10 Teka-Teki Logika Mode Puzzle!");
+                alert(`Selamat! Kamu menyelesaikan seluruh ${Object.keys(PUZZLE_LEVELS).length} Teka-Teki Logika Mode Puzzle!`);
                 showScreen('landing-page');
                 updateCertificateCard();
             }
@@ -2822,6 +3524,9 @@ function loadPatternLevel(levelId) {
 
     const lvl = PATTERN_LEVELS[levelId];
 
+    // Shuffle answer positions so the correct answer is not always in the same place
+    patternOptionOrder = shuffleArray(lvl.options.map((_, i) => i));
+
     dom.patternLevelTitle.innerText = lvl.title;
     dom.patternLevelTag.innerText = lvl.concept;
     dom.patternIntroText.innerText = lvl.instruction;
@@ -2841,7 +3546,7 @@ function renderPatternWorkspace() {
         div.className = 'pattern-item';
         if (item === '?') {
             div.classList.add('question-mark');
-            div.innerText = selectedPatternOption !== null ? lvl.options[selectedPatternOption] : '?';
+            div.innerText = selectedPatternOption !== null ? lvl.options[patternOptionOrder[selectedPatternOption]] : '?';
         } else {
             div.innerText = item;
         }
@@ -2850,7 +3555,8 @@ function renderPatternWorkspace() {
 
     // Render Answer Options
     dom.patternOptionsList.innerHTML = '';
-    lvl.options.forEach((optText, oIdx) => {
+    patternOptionOrder.forEach((originalIdx, oIdx) => {
+        const optText = lvl.options[originalIdx];
         const btn = document.createElement('button');
         btn.className = 'pattern-option-btn';
         if (selectedPatternOption === oIdx) {
@@ -2876,7 +3582,8 @@ function checkPatternSolution() {
     }
 
     const lvl = PATTERN_LEVELS[currentPatternLevel];
-    const isCorrect = (selectedPatternOption === lvl.correctIndex);
+    const correctDisplayIdx = patternOptionOrder.indexOf(lvl.correctIndex);
+    const isCorrect = (selectedPatternOption === correctDisplayIdx);
 
     const optionBtns = dom.patternOptionsList.querySelectorAll('.pattern-option-btn');
 
@@ -2918,8 +3625,8 @@ function checkPatternSolution() {
         if (optionBtns[selectedPatternOption]) {
             optionBtns[selectedPatternOption].classList.add('wrong-reveal');
         }
-        if (optionBtns[lvl.correctIndex]) {
-            optionBtns[lvl.correctIndex].classList.add('correct-reveal');
+        if (optionBtns[correctDisplayIdx]) {
+            optionBtns[correctDisplayIdx].classList.add('correct-reveal');
         }
 
         dom.failureModalTitle.innerText = "Pilihan Pola Belum Tepat! ❌";
@@ -2943,7 +3650,7 @@ function updateCertificateCard() {
     const puzzleDoneCount = (new Set(completedPuzzleLevels)).size;
     const patternDoneCount = (new Set(completedPatternLevels)).size;
 
-    const mazeDone = mazeDoneCount >= 10;
+    const mazeDone = mazeDoneCount >= TOTAL_MAZE_LEVELS;
     const puzzleDone = puzzleDoneCount >= totalPuzzles;
     const patternDone = patternDoneCount >= totalPatterns;
     const allDone = mazeDone && puzzleDone && patternDone;
@@ -2957,7 +3664,7 @@ function updateCertificateCard() {
         dom.modeCertBtn.classList.add('locked');
 
         let parts = [];
-        if (!mazeDone) parts.push(`Maze ${mazeDoneCount}/10`);
+        if (!mazeDone) parts.push(`Maze ${mazeDoneCount}/${TOTAL_MAZE_LEVELS}`);
         if (!puzzleDone) parts.push(`Puzzle ${puzzleDoneCount}/${totalPuzzles}`);
         if (!patternDone) parts.push(`Pola ${patternDoneCount}/${totalPatterns}`);
 

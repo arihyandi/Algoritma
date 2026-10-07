@@ -466,12 +466,32 @@ body {
     font-size: 0.9rem;
     color: var(--text-secondary);
     line-height: 1.5;
-    margin-bottom: 2rem;
-    flex-grow: 1;
+    margin-bottom: 1.5rem;
+    /* Ringkas deskripsi agar 25 kartu tetap rapi; teks lengkap tampil di arena */
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Judul tingkat kesulitan di daftar misi (setiap 5 level) */
+.level-tier-heading {
+    grid-column: 1 / -1;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    padding: 0.5rem 0 0.25rem;
+    margin-top: 0.5rem;
+    border-bottom: 1px solid var(--panel-border);
+}
+
+.level-tier-heading:first-child {
+    margin-top: 0;
 }
 
 .btn-level-action {
     width: 100%;
+    margin-top: auto;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
