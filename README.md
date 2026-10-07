@@ -10,7 +10,7 @@ Tidak perlu instalasi, server, atau koneksi internet (kecuali untuk memuat font)
 |---|---|---|
 | 🗺️ **Labirin (Maze)** | 25 | Sekuensial, Perulangan (Loop, termasuk loop bersarang), Kondisional (Jika–Maka), Debugging |
 | 🧩 **Teka-Teki (Puzzle)** | 25 | Menyusun urutan langkah algoritma, dari kegiatan sehari-hari hingga Bubble Sort, Pencarian Biner, dan FizzBuzz |
-| 🎨 **Pengenalan Pola** | 50 | Pola warna, angka, huruf, dan logika (Pemula → Legenda) |
+| 🎨 **Pengenalan Pola** | 50 | Pola berulang, deret bilangan & huruf, hingga Fibonacci, biner, dan look-and-say (Pemula → Master, 10 soal per tingkat) |
 | 🏆 **Kuis & Sertifikat** | 5 soal | Terbuka setelah semua mode selesai. Lulus jika **minimal 3 dari 5** jawaban benar |
 
 ### Tingkat Kesulitan Maze & Puzzle
@@ -24,6 +24,16 @@ Setiap 5 level membentuk satu tingkat. Level berikutnya terbuka setelah level se
 | ⚙️ Menengah | 11 – 15 | Peta 7×7: rute panjang, pola keliling, sensor berulang | Else-if bertingkat, loop *selama*, variabel |
 | 🚀 Mahir | 16 – 20 | Peta 7×7: **loop bersarang**, sensor rusak, lorong buntu | Kondisional di dalam loop, rata-rata, nilai terbesar |
 | 👑 Master | 21 – 25 | Peta 8×8 penuh lorong buntu, gabungan semua konsep | ATM (if bersarang), Bubble Sort, tabel perkalian, Pencarian Biner, FizzBuzz |
+
+### Tingkat Kesulitan Mode Pola (10 soal per tingkat)
+
+| Tingkat | Soal | Konsep |
+|---|---|---|
+| 🌱 Pemula | 1 – 10 | Pola berulang A-B, A-B-C, A-A-B, rotasi panah, hitung maju/mundur, abjad |
+| 📘 Dasar | 11 – 20 | Pola A-B-C-D, pola cermin, kelipatan, bilangan ganjil, fase bulan, pola dua atribut (bentuk + warna) |
+| ⚙️ Menengah | 21 – 30 | Perkalian ×2 dan ×3, selisih bertambah, dua deret berselang, kuadrat, aturan bergantian, jam |
+| 🚀 Mahir | 31 – 40 | Fibonacci, bilangan segitiga, prima, biner, kubik, dua operasi bergantian |
+| 👑 Master | 41 – 50 | Pangkat 2, deret Lucas, faktorial, Tribonacci, huruf Fibonacci, look-and-say |
 
 Setelah lulus kuis, siswa mengetik nama lengkap dan dapat **mencetak / menyimpan sertifikat sebagai PDF** (gunakan menu *Print → Save as PDF* di browser).
 
