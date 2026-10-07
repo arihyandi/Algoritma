@@ -1998,3 +1998,18 @@ body {
         width: 100%;
     }
 }
+
+/* Deret pola panjang tetap ringkas di layar HP */
+@media (max-width: 600px) {
+    .pattern-display-area {
+        gap: 0.5rem;
+        padding: 1rem 0.75rem;
+    }
+    .pattern-item {
+        min-width: 48px;
+        min-height: 48px;
+        padding: 0.4rem 0.6rem;
+        font-size: 1.35rem;
+        border-radius: 10px;
+    }
+}

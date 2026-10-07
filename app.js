@@ -720,9 +720,12 @@ const LEVEL_TIERS = [
     { name: 'Master', icon: '👑' }
 ];
 
-function getLevelTier(levelId) {
-    return LEVEL_TIERS[Math.min(Math.ceil(levelId / 5), LEVEL_TIERS.length) - 1];
+function getLevelTier(levelId, tierSize = 5) {
+    return LEVEL_TIERS[Math.min(Math.ceil(levelId / tierSize), LEVEL_TIERS.length) - 1];
 }
+
+// Mode Pola memiliki 50 soal: setiap tingkat berisi 10 soal
+const PATTERN_TIER_SIZE = 10;
 
 // Quiz Questions
 const QUIZ_QUESTIONS = [
@@ -1199,514 +1202,510 @@ const PUZZLE_LEVELS = {
 
 // Pattern Recognition Levels Definitions (Computational Thinking Concept) - 50 Progressive Levels
 const PATTERN_LEVELS = {
-    // --- TIER 1: PEMULA (Level 1 - 10) ---
+    // --- TINGKAT PEMULA (Pola 1 - 10) ---
     1: {
         id: 1,
         title: "Pola 1: Warna Berulang",
-        concept: "Tingkat: Pemula (Pola A-B)",
-        instruction: "Perhatikan urutan warna di bawah ini. Tentukan warna yang tepat untuk mengisi tanda tanya (?)!",
+        concept: "Tingkat Pemula · Pola A-B",
+        instruction: "Perhatikan urutan warna. Warna apa yang mengisi tanda tanya (?)?",
         sequence: ["🔴", "🔵", "🔴", "🔵", "🔴", "?"],
         options: ["🔵", "🔴", "🟡", "🟢"],
         correctIndex: 0,
-        insight: "Pola berulang A-B-A-B adalah bentuk dasar pengenalan pola. Komputer mengenali perulangan urutan untuk memprediksi elemen berikutnya."
+        insight: "Pola A-B-A-B adalah pola paling dasar: dua elemen bergantian terus-menerus. Mengenali bagian yang berulang adalah langkah pertama berpikir komputasional."
     },
     2: {
         id: 2,
-        title: "Pola 2: Bentuk Geometri",
-        concept: "Tingkat: Pemula (Bentuk A-B)",
-        instruction: "Analisis urutan bentuk geometri berikut dan pilih bentuk yang melengkapi barisan!",
-        sequence: ["🔺", "🔷", "🔺", "🔷", "🔺", "?"],
-        options: ["🔺", "🔷", "🔴", "⭐"],
-        correctIndex: 1,
-        insight: "Pengenalan bentuk geometris membantu algoritma visi komputer (computer vision) dalam mengenali objek."
+        title: "Pola 2: Buah Berulang",
+        concept: "Tingkat Pemula · Pola A-B-C",
+        instruction: "Tiga buah muncul bergantian. Buah apa yang datang berikutnya?",
+        sequence: ["🍎", "🍌", "🍇", "🍎", "🍌", "?"],
+        options: ["🍎", "🍌", "🍇", "🍓"],
+        correctIndex: 2,
+        insight: "Satu 'unit pola' bisa berisi lebih dari dua elemen. Di sini unitnya adalah apel-pisang-anggur yang diulang."
     },
     3: {
         id: 3,
-        title: "Pola 3: Vektor Arah Komputasi",
-        concept: "Tingkat: Pemula (Arah Panah)",
-        instruction: "Robot Albi bergerak mengikuti pola arah panah bergantian. Mana panah selanjutnya?",
-        sequence: ["⬆️", "➡️", "⬆️", "➡️", "⬆️", "?"],
-        options: ["⬆️", "⬇️", "➡️", "⬅️"],
-        correctIndex: 2,
-        insight: "Vektor arah melatih logika navigasi dan koordinat gerak dalam pemrograman robot."
+        title: "Pola 3: Bintang dan Bulan",
+        concept: "Tingkat Pemula · Pola A-A-B",
+        instruction: "Perhatikan berapa kali bintang muncul sebelum bulan!",
+        sequence: ["⭐", "⭐", "🌙", "⭐", "⭐", "🌙", "⭐", "?"],
+        options: ["⭐", "🌙", "☀️", "☁️"],
+        correctIndex: 0,
+        insight: "Unit pola tidak harus berisi elemen yang berbeda semua. Pola A-A-B mengulang bintang dua kali sebelum bulan."
     },
     4: {
         id: 4,
-        title: "Pola 4: Pertumbuhan Barisan",
-        concept: "Tingkat: Pemula (Incremental +1)",
-        instruction: "Jumlah bintang bertambah secara teratur di setiap langkah. Berapa bintang pada urutan berikutnya?",
-        sequence: ["⭐", "⭐⭐", "⭐⭐⭐", "?"],
-        options: ["⭐⭐⭐", "⭐⭐⭐⭐", "⭐", "⭐⭐⭐⭐⭐"],
+        title: "Pola 4: Kucing dan Anjing",
+        concept: "Tingkat Pemula · Pola A-B-B",
+        instruction: "Satu kucing, lalu dua anjing... Hewan apa selanjutnya?",
+        sequence: ["🐱", "🐶", "🐶", "🐱", "🐶", "🐶", "🐱", "?"],
+        options: ["🐱", "🐶", "🐰", "🐭"],
         correctIndex: 1,
-        insight: "Pola pertumbuhan incremental (+1) adalah dasar dari variabel penghitung (counter variable) dalam perulangan (loops)."
+        insight: "Menentukan di mana sebuah unit pola dimulai dan berakhir membantu kita memprediksi elemen mana pun di dalam deret."
     },
     5: {
         id: 5,
-        title: "Pola 5: Sub-Pola Trio",
-        concept: "Tingkat: Pemula (Trio A-B-C)",
-        instruction: "Perhatikan pola yang terdiri dari 3 elemen (Merah - Kuning - Hijau). Warna apa yang muncul setelah Merah?",
-        sequence: ["🔴", "🟡", "🟢", "🔴", "🟡", "🟢", "🔴", "?"],
-        options: ["🔴", "🟢", "🟡", "🔵"],
-        correctIndex: 2,
-        insight: "Memecah barisan menjadi kelompok sub-pola (A-B-C) mempermudah analisis struktur data yang besar."
+        title: "Pola 5: Menghitung Maju",
+        concept: "Tingkat Pemula · Bilangan +1",
+        instruction: "Angka bertambah satu per satu. Angka berapa selanjutnya?",
+        sequence: ["1", "2", "3", "4", "5", "?"],
+        options: ["5", "7", "10", "6"],
+        correctIndex: 3,
+        insight: "Deret bilangan adalah pola yang dibentuk oleh sebuah aturan. Aturan di sini sangat sederhana: tambah 1."
     },
     6: {
         id: 6,
-        title: "Pola 6: Barisan Bilangan Genap",
-        concept: "Tingkat: Pemula (Numerik +2)",
-        instruction: "Komputer menghitung angka dengan selisih +2. Angka berapakah selanjutnya?",
+        title: "Pola 6: Bilangan Genap",
+        concept: "Tingkat Pemula · Bilangan +2",
+        instruction: "Setiap angka bertambah 2. Lanjutkan deretnya!",
         sequence: ["2", "4", "6", "8", "?"],
-        options: ["9", "10", "12", "11"],
-        correctIndex: 1,
-        insight: "Deret aritmatika numerik digunakan dalam algoritma perhitungan dan pengindeksan data array."
+        options: ["9", "12", "11", "10"],
+        correctIndex: 3,
+        insight: "Selisih antara dua angka yang berurutan disebut beda. Dengan mengetahui bedanya, kita bisa menebak angka berikutnya."
     },
     7: {
         id: 7,
-        title: "Pola 7: Rotasi Waktu Jam",
-        concept: "Tingkat: Pemula (Siklik Clockwise)",
-        instruction: "Jarum jam berputar searah jarum jam setiap 3 jam (12 -> 3 -> 6 -> 9 -> ?). Jam berapa berikutnya?",
-        sequence: ["🕛", "🕒", "🕕", "🕘", "?"],
-        options: ["🕒", "🕕", "🕘", "🕛"],
+        title: "Pola 7: Panah Berputar",
+        concept: "Tingkat Pemula · Pola Rotasi",
+        instruction: "Panah berputar searah jarum jam. Ke mana arah panah berikutnya?",
+        sequence: ["⬆️", "➡️", "⬇️", "⬅️", "⬆️", "?"],
+        options: ["⬅️", "⬇️", "⬆️", "➡️"],
         correctIndex: 3,
-        insight: "Pola siklik (cyclic) sering digunakan dalam perulangan tak terbatas dan sistem penjadwalan (round-robin scheduling)."
+        insight: "Rotasi adalah pola berulang dengan 4 posisi. Robot dan karakter game memakai pola seperti ini untuk berbelok."
     },
     8: {
         id: 8,
-        title: "Pola 8: Alternatif Buah-Buahan",
-        concept: "Tingkat: Pemula (Simbolis A-B)",
-        instruction: "Apel dan pisang muncul secara bergantian. Buah apa yang melengkapi pola ini?",
-        sequence: ["🍎", "🍌", "🍎", "🍌", "🍎", "?"],
-        options: ["🍎", "🍌", "🍇", "🍊"],
+        title: "Pola 8: Bintang Bertambah",
+        concept: "Tingkat Pemula · Pola Bertumbuh",
+        instruction: "Jumlah bintang terus bertambah. Berapa bintang berikutnya?",
+        sequence: ["⭐", "⭐⭐", "⭐⭐⭐", "?"],
+        options: ["⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐", "⭐⭐"],
         correctIndex: 1,
-        insight: "Pencocokan pola simbolis adalah dasar dari pencarian teks dan regex (regular expressions)."
+        insight: "Pola bertumbuh berbeda dengan pola berulang: setiap langkah menjadi lebih besar daripada langkah sebelumnya."
     },
     9: {
         id: 9,
-        title: "Pola 9: Kode Biner Alternatif",
-        concept: "Tingkat: Pemula (Sinyal Biner)",
-        instruction: "Sinyal data biner berubah antara 0 (Low) dan 1 (High). Berapa sinyal berikutnya?",
-        sequence: ["0", "1", "0", "1", "0", "?"],
-        options: ["0", "1", "2", "10"],
-        correctIndex: 1,
-        insight: "Sinyal biner (0 & 1) adalah bahasa paling mendasar yang digunakan komputer untuk memproses semua informasi."
+        title: "Pola 9: Urutan Abjad",
+        concept: "Tingkat Pemula · Huruf +1",
+        instruction: "Huruf disusun sesuai abjad. Huruf apa selanjutnya?",
+        sequence: ["A", "B", "C", "D", "?"],
+        options: ["E", "F", "D", "G"],
+        correctIndex: 0,
+        insight: "Huruf juga bisa membentuk pola karena memiliki urutan. Komputer menyimpan setiap huruf sebagai angka, misalnya A = 65 dalam kode ASCII."
     },
     10: {
         id: 10,
-        title: "Pola 10: Algoritma 4 Simbol",
-        concept: "Tingkat: Pemula (Quad A-B-C-D)",
-        instruction: "Pola 4 bentuk (Segitiga - Belah Ketupat - Lingkaran - Persegi). Pilih simbol penutup yang tepat!",
-        sequence: ["🔺", "🔷", "🟢", "🟡", "🔺", "🔷", "🟢", "?"],
-        options: ["🔺", "🟢", "🟡", "🔷"],
-        correctIndex: 2,
-        insight: "Selamat! Kamu lulus tingkat Pemula! Pengenalan pola multi-elemen melatih ingatan kerja memori komputer."
+        title: "Pola 10: Hitung Mundur",
+        concept: "Tingkat Pemula · Bilangan -1",
+        instruction: "Angka berkurang satu per satu. Angka berapa selanjutnya?",
+        sequence: ["10", "9", "8", "7", "?"],
+        options: ["6", "5", "8", "4"],
+        correctIndex: 0,
+        insight: "Pola bisa naik maupun turun. Hitung mundur adalah pola dengan beda -1, seperti pada peluncuran roket."
     },
-
-    // --- TIER 2: MENENGAH (Level 11 - 20) ---
+    // --- TINGKAT DASAR (Pola 11 - 20) ---
     11: {
         id: 11,
-        title: "Pola 11: Sub-Pola Ganda (A-A-B)",
-        concept: "Tingkat: Menengah (Pengulangan A-A-B)",
-        instruction: "Dua kubus biru diikuti satu kubus hijau secara berulang. Apa kubus selanjutnya?",
-        sequence: ["🟦", "🟦", "🟩", "🟦", "🟦", "🟩", "🟦", "?"],
-        options: ["🟩", "🟦", "🟨", "🟥"],
-        correctIndex: 1,
-        insight: "Pola frekuensi tidak seimbang (A-A-B) melatih algoritma kompresi data dalam mendeteksi pengulangan karakter."
+        title: "Pola 11: Lampu Empat Warna",
+        concept: "Tingkat Dasar · Pola A-B-C-D",
+        instruction: "Empat warna lampu menyala bergantian. Warna apa yang menyala berikutnya?",
+        sequence: ["🔴", "🟡", "🟢", "🔵", "🔴", "🟡", "🟢", "?"],
+        options: ["🔵", "🔴", "🟡", "🟢"],
+        correctIndex: 0,
+        insight: "Semakin panjang unit pola, semakin teliti kita harus mengamati. Hitung dulu berapa elemen dalam satu unit."
     },
     12: {
         id: 12,
-        title: "Pola 12: Barisan Bilangan Ganjil",
-        concept: "Tingkat: Menengah (Numerik Ganjil)",
-        instruction: "Tentukan angka ganjil berikutnya dalam deret aritmatika ini!",
-        sequence: ["1", "3", "5", "7", "?"],
-        options: ["8", "9", "11", "10"],
-        correctIndex: 1,
-        insight: "Pola ganjil digunakan dalam algoritma pemilahan data genap-ganjil (parity check filter)."
+        title: "Pola 12: Pola Cermin",
+        concept: "Tingkat Dasar · Pola Simetri",
+        instruction: "Angka naik lalu turun kembali seperti bayangan di cermin. Angka berapa selanjutnya?",
+        sequence: ["1", "2", "3", "4", "3", "2", "?"],
+        options: ["0", "4", "1", "2"],
+        correctIndex: 2,
+        insight: "Pola simetris (cermin) membaca sama dari depan dan belakang. Kata seperti 'KATAK' juga simetris dan disebut palindrom."
     },
     13: {
         id: 13,
-        title: "Pola 13: Rotasi Panah Berlawanan",
-        concept: "Tingkat: Menengah (Rotasi Counter-Clockwise)",
-        instruction: "Panah berputar berlawanan arah jarum jam. Ke mana arah panah selanjutnya?",
-        sequence: ["⬅️", "⬇️", "➡️", "⬆️", "⬅️", "⬇️", "?"],
-        options: ["⬅️", "⬆️", "➡️", "⬇️"],
-        correctIndex: 2,
-        insight: "Perputaran arah berlawanan jarum jam melatih transformasi matriks rotasi 90-derajat pada pengolahan citra."
+        title: "Pola 13: Kelipatan Lima",
+        concept: "Tingkat Dasar · Bilangan +5",
+        instruction: "Hitung maju dengan lompatan 5. Angka berapa selanjutnya?",
+        sequence: ["5", "10", "15", "20", "?"],
+        options: ["25", "30", "21", "24"],
+        correctIndex: 0,
+        insight: "Kelipatan adalah pola dengan beda tetap. Kelipatan 5 selalu berakhir dengan angka 0 atau 5."
     },
     14: {
         id: 14,
-        title: "Pola 14: Pertumbuhan Spacer",
-        concept: "Tingkat: Menengah (Pola Spacer +1)",
-        instruction: "Jumlah kotak hitam bertambah di antara kotak putih. Pilih simbol berikutnya!",
-        sequence: ["⬛", "⬜", "⬛", "⬛", "⬜", "⬛", "⬛", "⬛", "?"],
-        options: ["⬛", "⬜", "🟲", "🔳"],
-        correctIndex: 1,
-        insight: "Pola spacer variabel digunakan dalam teknik framing data paket jaringan untuk menandai batas data."
+        title: "Pola 14: Bilangan Ganjil",
+        concept: "Tingkat Dasar · Bilangan +2",
+        instruction: "Ini adalah deret bilangan ganjil. Angka berapa selanjutnya?",
+        sequence: ["1", "3", "5", "7", "9", "?"],
+        options: ["10", "12", "13", "11"],
+        correctIndex: 3,
+        insight: "Bilangan ganjil dan genap sama-sama memiliki beda 2. Perbedaannya hanya pada angka awal deret."
     },
     15: {
         id: 15,
-        title: "Pola 15: Simbol Hewan Bergantian",
-        concept: "Tingkat: Menengah (Pola Simbolis)",
-        instruction: "Perhatikan pola kucing dan anjing berikut. Apa simbol selanjutnya?",
-        sequence: ["🐱", "🐶", "🐱", "🐶", "🐱", "?"],
-        options: ["🐱", "🐶", "🐭", "🐰"],
-        correctIndex: 1,
-        insight: "Pencocokan kelas objek melatih pengenalan pola dalam Machine Learning dan Neural Networks."
+        title: "Pola 15: Turun Tiga",
+        concept: "Tingkat Dasar · Bilangan -3",
+        instruction: "Angka berkurang dengan jumlah yang sama. Berapa pengurangnya? Lanjutkan deretnya!",
+        sequence: ["20", "17", "14", "11", "?"],
+        options: ["8", "9", "7", "5"],
+        correctIndex: 0,
+        insight: "Untuk menemukan aturan deret, kurangkan dua angka berurutan. Jika hasilnya selalu sama, aturan deretnya adalah beda tetap."
     },
     16: {
         id: 16,
-        title: "Pola 16: Kelipatan 5",
-        concept: "Tingkat: Menengah (Skala 5)",
-        instruction: "Komputer melakukan perhitungan melompat 5 angka. Angka berapakah selanjutnya?",
-        sequence: ["5", "10", "15", "20", "?"],
-        options: ["22", "25", "30", "24"],
-        correctIndex: 1,
-        insight: "Skala kelipatan digunakan dalam pembuatan sampel data statistik dan pembuatan skala pengukuran grafik."
+        title: "Pola 16: Huruf Melompat",
+        concept: "Tingkat Dasar · Huruf +2",
+        instruction: "Ada satu huruf yang dilewati setiap kali. Huruf apa selanjutnya?",
+        sequence: ["A", "C", "E", "G", "?"],
+        options: ["H", "J", "K", "I"],
+        correctIndex: 3,
+        insight: "Pola huruf bisa melompat, sama seperti pola angka. A, C, E, G sesuai dengan posisi abjad 1, 3, 5, 7."
     },
     17: {
         id: 17,
-        title: "Pola 17: Peringatan Lalulintas",
-        concept: "Tingkat: Menengah (Kondisi Lampu)",
-        instruction: "Tanda Stop dan Bahaya muncul secara bergantian. Apa tanda berikutnya?",
-        sequence: ["🛑", "⚠️", "🛑", "⚠️", "🛑", "?"],
-        options: ["🛑", "⛔", "⚠️", "🚨"],
+        title: "Pola 17: Ekspresi Wajah",
+        concept: "Tingkat Dasar · Pola A-B-B-A",
+        instruction: "Perhatikan unit polanya baik-baik: senang, sedih, sedih, senang...",
+        sequence: ["😀", "😢", "😢", "😀", "😀", "😢", "😢", "?"],
+        options: ["😢", "😡", "😀", "😴"],
         correctIndex: 2,
-        insight: "Pola bergantian status (State Toggle) digunakan pada indikator status sistem dan lampu peringatan otomatis."
+        insight: "Pola A-B-B-A adalah pola cermin yang diulang. Menggabungkan dua jenis pola adalah awal dari pola yang lebih kompleks."
     },
     18: {
         id: 18,
-        title: "Pola 18: Siklus Malam-Siang",
-        concept: "Tingkat: Menengah (Siklus Biner)",
-        instruction: "Bulan dan matahari bergantian menerangi langit. Pilih simbol selanjutnya!",
-        sequence: ["🌙", "☀️", "🌙", "☀️", "🌙", "?"],
-        options: ["🌙", "☀️", "⭐", "☁️"],
+        title: "Pola 18: Fase Bulan",
+        concept: "Tingkat Dasar · Pola Urutan Alam",
+        instruction: "Bulan berubah bentuk sedikit demi sedikit. Fase bulan apa berikutnya?",
+        sequence: ["🌑", "🌒", "🌓", "🌔", "🌕", "?"],
+        options: ["🌑", "🌖", "🌔", "🌘"],
         correctIndex: 1,
-        insight: "Siklus alami adalah analogi dari sistem saklar day-night mode pada antarmuka aplikasi."
+        insight: "Banyak pola berasal dari alam, misalnya fase bulan, musim, dan pasang surut. Ilmuwan memakai pengenalan pola untuk memprediksinya."
     },
     19: {
         id: 19,
-        title: "Pola 19: Pola Trio Hijau-Merah",
-        concept: "Tingkat: Menengah (A-A-B Warna)",
-        instruction: "Dua lingkaran hijau diikuti satu lingkaran merah. Warna apa setelah hijau pertama di barisan baru?",
-        sequence: ["🟢", "🟢", "🔴", "🟢", "🟢", "🔴", "🟢", "?"],
-        options: ["🔴", "🟢", "🟡", "🔵"],
-        correctIndex: 1,
-        insight: "Deteksi pasangan warna berulang melatih logika verifikasi blok memori dalam struktur cache."
+        title: "Pola 19: Turun Sepuluh",
+        concept: "Tingkat Dasar · Bilangan -10",
+        instruction: "Angka puluhan berkurang secara teratur. Angka berapa selanjutnya?",
+        sequence: ["100", "90", "80", "70", "?"],
+        options: ["50", "65", "75", "60"],
+        correctIndex: 3,
+        insight: "Pola dengan beda yang besar tetap mudah ditebak jika kita fokus pada aturannya, bukan pada besar angkanya."
     },
     20: {
         id: 20,
-        title: "Pola 20: Barisan Kelipatan 3",
-        concept: "Tingkat: Menengah (Skala 3)",
-        instruction: "Hitung deret kelipatan 3 dan temukan angka selanjutnya!",
-        sequence: ["3", "6", "9", "12", "?"],
-        options: ["14", "15", "16", "18"],
-        correctIndex: 1,
-        insight: "Selamat! Kamu menguasai tingkat Menengah! Kelipatan 3 digunakan dalam pengorganisasian matriks 3D."
+        title: "Pola 20: Bentuk dan Warna",
+        concept: "Tingkat Dasar · Pola Dua Atribut",
+        instruction: "Perhatikan BENTUK dan WARNA sekaligus! Elemen apa yang melengkapi pola?",
+        sequence: ["🔴", "🔵", "🟥", "🟦", "🔴", "🔵", "?"],
+        options: ["🟦", "🔴", "🟥", "🔵"],
+        correctIndex: 2,
+        insight: "Setiap elemen bisa punya beberapa atribut (bentuk dan warna). Algoritma pengenal gambar menganalisis banyak atribut secara bersamaan."
     },
-
-    // --- TIER 3: MAHIR (Level 21 - 30) ---
+    // --- TINGKAT MENENGAH (Pola 21 - 30) ---
     21: {
         id: 21,
-        title: "Pola 21: Pelipatgandaan Eksponensial",
-        concept: "Tingkat: Mahir (Eksponensial x2)",
-        instruction: "Angka dikalikan 2 pada setiap langkah (1 -> 2 -> 4 -> 8 -> ?). Berapa hasilnya?",
-        sequence: ["1", "2", "4", "8", "?"],
-        options: ["12", "16", "20", "14"],
-        correctIndex: 1,
-        insight: "Pertumbuhan eksponensial x2 adalah dasar dari ukuran kapasitas RAM dan memori biner (Byte, KB, MB, GB)."
+        title: "Pola 21: Berlipat Ganda",
+        concept: "Tingkat Menengah · Bilangan ×2",
+        instruction: "Setiap angka adalah hasil dari angka sebelumnya dikali sesuatu. Angka berapa selanjutnya?",
+        sequence: ["1", "2", "4", "8", "16", "?"],
+        options: ["24", "18", "32", "20"],
+        correctIndex: 2,
+        insight: "Pola perkalian tumbuh jauh lebih cepat daripada pola penjumlahan. Inilah alasan virus atau berita viral bisa menyebar sangat cepat."
     },
     22: {
         id: 22,
-        title: "Pola 22: Spacer Bertambah",
-        concept: "Tingkat: Mahir (Pertumbuhan Spacer Kuantitas)",
-        instruction: "Kotak kuning bertambah 1 setiap kali melewati kotak ungu. Pilih simbol yang tepat!",
-        sequence: ["🟨", "🟪", "🟨", "🟨", "🟪", "🟨", "🟨", "🟨", "?"],
-        options: ["🟨", "🟪", "🟦", "🟧"],
-        correctIndex: 1,
-        insight: "Pola spacer kuantitas variabel melatih parsing string algoritma penguraian kode sumber (Lexical Analyzer)."
+        title: "Pola 22: Selisih Bertambah",
+        concept: "Tingkat Menengah · Beda Bertingkat",
+        instruction: "Perhatikan SELISIH antar angka: +1, +2, +3, ... Angka berapa selanjutnya?",
+        sequence: ["1", "2", "4", "7", "11", "?"],
+        options: ["15", "14", "16", "22"],
+        correctIndex: 2,
+        insight: "Terkadang aturannya tersembunyi di dalam selisih. Jika bedanya tidak tetap, cari pola pada deret selisihnya."
     },
     23: {
         id: 23,
-        title: "Pola 23: Pola Panah Pasangan",
-        concept: "Tingkat: Mahir (Double Step Arrows)",
-        instruction: "Dua panah ke atas, dua panah ke kanan, dua panah ke bawah. Ke mana panah berikutnya?",
-        sequence: ["⬆️", "⬆️", "➡️", "➡️", "⬇️", "⬇️", "⬅️", "?"],
-        options: ["⬆️", "➡️", "⬅️", "⬇️"],
-        correctIndex: 2,
-        insight: "Instruksi langkah ganda (Double Step) digunakan dalam pengontrol gerak presisi motor stepper industri."
+        title: "Pola 23: Dua Deret Berselang",
+        concept: "Tingkat Menengah · Deret Ganda",
+        instruction: "Ada DUA deret yang berselang-seling dalam satu baris. Temukan keduanya!",
+        sequence: ["1", "10", "2", "20", "3", "30", "?"],
+        options: ["40", "31", "5", "4"],
+        correctIndex: 3,
+        insight: "Memisahkan satu masalah besar menjadi beberapa bagian kecil disebut dekomposisi. Di sini satu deret ternyata berisi dua deret."
     },
     24: {
         id: 24,
-        title: "Pola 24: Deret Fibonacci Dasar",
-        concept: "Tingkat: Mahir (Deret Fibonacci N1+N2)",
-        instruction: "Setiap angka adalah hasil penjumlahan dua angka sebelumnya (1, 1, 2, 3, 5, ?). Angka berapa selanjutnya?",
-        sequence: ["1", "1", "2", "3", "5", "?"],
-        options: ["6", "7", "8", "9"],
-        correctIndex: 2,
-        insight: "Deret Fibonacci adalah pola keajaiban alam dan algoritma struktur data pohon pencarian (Fibonacci Heap)."
+        title: "Pola 24: Bilangan Kuadrat",
+        concept: "Tingkat Menengah · Bilangan n×n",
+        instruction: "1×1, 2×2, 3×3, ... Angka berapa selanjutnya?",
+        sequence: ["1", "4", "9", "16", "25", "?"],
+        options: ["36", "30", "35", "49"],
+        correctIndex: 0,
+        insight: "Bilangan kuadrat membentuk persegi: 9 titik bisa disusun menjadi persegi 3×3. Pola visual seperti ini sering dipakai dalam desain grafis."
     },
     25: {
         id: 25,
-        title: "Pola 25: Mobil dan Sepeda",
-        concept: "Tingkat: Mahir (Simbolis Transportasi)",
-        instruction: "Mobil dan sepeda bergantian di jalan siber. Apa simbol melengkapi urutan?",
-        sequence: ["🚗", "🚲", "🚗", "🚲", "🚗", "?"],
-        options: ["🚗", "🛵", "🚲", "✈️"],
+        title: "Pola 25: Naik Tiga Turun Satu",
+        concept: "Tingkat Menengah · Aturan Bergantian",
+        instruction: "Aturannya bergantian: +3, lalu -1, lalu +3, lalu -1... Angka berapa selanjutnya?",
+        sequence: ["2", "5", "4", "7", "6", "?"],
+        options: ["5", "8", "9", "10"],
         correctIndex: 2,
-        insight: "Pola pergantian jenis kendaraan melatih logika antrean lampu lalu lintas cerdas (Smart Traffic Control)."
+        insight: "Sebuah pola bisa memiliki lebih dari satu aturan yang dijalankan bergantian, seperti instruksi di dalam perulangan."
     },
     26: {
         id: 26,
-        title: "Pola 26: Deret Puluhan (+10)",
-        concept: "Tingkat: Mahir (Numerik Puluhan)",
-        instruction: "Hitung maju dengan selisih 10 angka!",
-        sequence: ["10", "20", "30", "40", "?"],
-        options: ["45", "50", "60", "55"],
-        correctIndex: 1,
-        insight: "Deret puluhan adalah skala acuan dasar dalam kalkulasi persentase dan sistem progres nilai."
+        title: "Pola 26: Abjad Mundur Melompat",
+        concept: "Tingkat Menengah · Huruf -2",
+        instruction: "Huruf berjalan mundur dari Z dan melewati satu huruf setiap kali. Huruf apa selanjutnya?",
+        sequence: ["Z", "X", "V", "T", "?"],
+        options: ["R", "S", "Q", "U"],
+        correctIndex: 0,
+        insight: "Pola mundur sama dengan pola maju, hanya arahnya terbalik. Coba tuliskan posisi abjadnya: 26, 24, 22, 20, ..."
     },
     27: {
         id: 27,
-        title: "Pola 27: Spektrum Warna 4-Langkah",
-        concept: "Tingkat: Mahir (Quad Spektrum)",
-        instruction: "Urutan warna: Hijau -> Kuning -> Oranye -> Merah. Warna apa setelah Oranye di siklus kedua?",
-        sequence: ["🟩", "🟨", "🟧", "🟥", "🟩", "🟨", "🟧", "?"],
-        options: ["🟩", "🟥", "🟨", "🟦"],
-        correctIndex: 1,
-        insight: "Spektrum warna bergradasi digunakan dalam indikator temperatur dan sistem Heatmap analisis data."
+        title: "Pola 27: Dibagi Dua",
+        concept: "Tingkat Menengah · Bilangan ÷2",
+        instruction: "Setiap angka adalah setengah dari angka sebelumnya. Angka berapa selanjutnya?",
+        sequence: ["64", "32", "16", "8", "?"],
+        options: ["6", "2", "4", "0"],
+        correctIndex: 2,
+        insight: "Membagi dua berulang kali adalah inti dari algoritma pencarian biner yang sangat cepat."
     },
     28: {
         id: 28,
-        title: "Pola 28: Deret Pengurangan (-10)",
-        concept: "Tingkat: Mahir (Numerik Pengurangan)",
-        instruction: "Angka berkurang 10 secara teratur. Berapa angka selanjutnya?",
-        sequence: ["100", "90", "80", "70", "?"],
-        options: ["65", "60", "50", "55"],
-        correctIndex: 1,
-        insight: "Deret hitung mundur (Countdown Pattern) digunakan dalam kalkulasi timer dan masa berlaku token akses."
+        title: "Pola 28: Jarum Jam",
+        concept: "Tingkat Menengah · Pola Waktu",
+        instruction: "Jarum jam melompat dengan jumlah jam yang sama. Pukul berapa selanjutnya?",
+        sequence: ["🕐", "🕒", "🕔", "🕖", "?"],
+        options: ["🕗", "🕙", "🕘", "🕕"],
+        correctIndex: 2,
+        insight: "Jam adalah pola berulang (siklus) 12 jam. Setelah pukul 12, jam kembali ke pukul 1. Inilah yang disebut aritmetika modulo."
     },
     29: {
         id: 29,
-        title: "Pola 29: Diamond Alternatif",
-        concept: "Tingkat: Mahir (Bentuk Diamond)",
-        instruction: "Diamond biru dan oranye bergantian. Pilih bentuk berikutnya!",
-        sequence: ["🔹", "🔸", "🔹", "🔸", "🔹", "?"],
-        options: ["🔹", "🔸", "💠", "🔷"],
-        correctIndex: 1,
-        insight: "Pencocokan bentuk ornamen melatih verifikasi token keamanan kriptografi."
+        title: "Pola 29: Huruf dan Angka",
+        concept: "Tingkat Menengah · Pola Berpasangan",
+        instruction: "Setiap elemen terdiri dari huruf dan angka yang sama-sama berpola. Elemen apa selanjutnya?",
+        sequence: ["A1", "B2", "C3", "D4", "?"],
+        options: ["E4", "F5", "D5", "E5"],
+        correctIndex: 3,
+        insight: "Satu elemen bisa mengikuti dua pola sekaligus. Kode kursi bioskop dan sel pada spreadsheet (A1, B2) memakai pola seperti ini."
     },
     30: {
         id: 30,
-        title: "Pola 30: Deret Bilangan Prima",
-        concept: "Tingkat: Mahir (Bilangan Prima)",
-        instruction: "Tantangan Matematika Komputasi! Bilangan yang hanya bisa dibagi 1 dan dirinya sendiri (2, 3, 5, 7, 11, ?). Berapa selanjutnya?",
-        sequence: ["2", "3", "5", "7", "11", "?"],
-        options: ["12", "13", "14", "15"],
+        title: "Pola 30: Kali Tiga",
+        concept: "Tingkat Menengah · Bilangan ×3",
+        instruction: "Pola perkalian dengan pengali yang lebih besar. Angka berapa selanjutnya?",
+        sequence: ["1", "3", "9", "27", "?"],
+        options: ["54", "81", "36", "30"],
         correctIndex: 1,
-        insight: "Selamat! Kamu lulus tingkat Mahir! Bilangan prima adalah benteng kunci utama enkripsi keamanan internet (RSA Encryption)."
+        insight: "Dengan pengali 3, deret tumbuh lebih cepat lagi. Pola pertumbuhan seperti ini disebut eksponensial."
     },
-
-    // --- TIER 4: TANTANGAN MASTER (Level 31 - 40) ---
+    // --- TINGKAT MAHIR (Pola 31 - 40) ---
     31: {
         id: 31,
-        title: "Pola 31: Pertumbuhan Blok Merah",
-        concept: "Tingkat: Master (Pertumbuhan N+1)",
-        instruction: "Jumlah blok merah bertambah (1, 2, 3...) di antara blok biru. Pilih simbol berikutnya!",
-        sequence: ["🔴", "🟦", "🔴", "🔴", "🟦", "🔴", "🔴", "🔴", "?"],
-        options: ["🔴", "🟦", "🟢", "🟡"],
-        correctIndex: 1,
-        insight: "Pola pertumbuhan elemen variabel melatih algoritma kompresi file Run-Length Encoding (RLE)."
+        title: "Pola 31: Deret Fibonacci",
+        concept: "Tingkat Mahir · Jumlah Dua Sebelumnya",
+        instruction: "Setiap angka adalah hasil penjumlahan DUA angka sebelumnya. Angka berapa selanjutnya?",
+        sequence: ["1", "1", "2", "3", "5", "8", "?"],
+        options: ["11", "12", "13", "16"],
+        correctIndex: 2,
+        insight: "Deret Fibonacci muncul di alam: susunan biji bunga matahari, kulit nanas, dan cangkang siput. Programmer sering memakainya untuk berlatih rekursi."
     },
     32: {
         id: 32,
-        title: "Pola 32: Pengurangan Teratur (-5)",
-        concept: "Tingkat: Master (Hitung Mundur -5)",
-        instruction: "Hitung mundur angka dengan pengurangan 5 secara konstan!",
-        sequence: ["50", "45", "40", "35", "?"],
-        options: ["30", "25", "32", "28"],
+        title: "Pola 32: Bilangan Segitiga",
+        concept: "Tingkat Mahir · Penjumlahan Berurutan",
+        instruction: "1, 1+2, 1+2+3, ... Angka berapa selanjutnya?",
+        sequence: ["1", "3", "6", "10", "15", "?"],
+        options: ["21", "20", "25", "18"],
         correctIndex: 0,
-        insight: "Hitung mundur kelipatan 5 digunakan dalam pembagian alokasi memori halaman (Page Memory Allocation)."
+        insight: "Bilangan segitiga adalah jumlah titik yang bisa disusun menjadi segitiga, seperti susunan pin bowling (10 pin)."
     },
     33: {
         id: 33,
-        title: "Pola 33: Rotasi Panah Diagonal",
-        concept: "Tingkat: Master (Vektor Diagonal)",
-        instruction: "Panah diagonal berputar searah jarum jam (Kanan Atas -> Kanan Bawah -> Kiri Bawah -> Kiri Atas -> ?). Panah mana selanjutnya?",
-        sequence: ["↗️", "↘️", "↙️", "↖️", "↗️", "?"],
-        options: ["↗️", "↘️", "↙️", "↖️"],
-        correctIndex: 1,
-        insight: "Rotasi diagonal melatih pemrosesan grafik game 2.5D Isometric."
+        title: "Pola 33: Bilangan Prima",
+        concept: "Tingkat Mahir · Hanya Habis Dibagi 1 dan Dirinya",
+        instruction: "Ini adalah deret bilangan prima. Bilangan prima apa selanjutnya?",
+        sequence: ["2", "3", "5", "7", "11", "?"],
+        options: ["12", "15", "13", "17"],
+        correctIndex: 2,
+        insight: "Bilangan prima tidak memiliki beda yang tetap. Karena itu, keamanan internet (enkripsi) memakai bilangan prima yang sangat besar."
     },
     34: {
         id: 34,
-        title: "Pola 34: Deret Angka Kuadrat (N²)",
-        concept: "Tingkat: Master (Pola Kuadrat N*N)",
-        instruction: "Angka kuadrat (1x1=1, 2x2=4, 3x3=9, 4x4=16, 5x5=?). Berapa angka selanjutnya?",
-        sequence: ["1", "4", "9", "16", "?"],
-        options: ["20", "25", "30", "24"],
-        correctIndex: 1,
-        insight: "Kompleksitas algoritma Kuadratik O(N²) adalah ukuran efisiensi algoritma pengurutan data seperti Bubble Sort."
+        title: "Pola 34: Kali Dua Tambah Satu",
+        concept: "Tingkat Mahir · Dua Operasi Bergantian",
+        instruction: "Operasinya bergantian: ×2, lalu +1, lalu ×2, lalu +1... Angka berapa selanjutnya?",
+        sequence: ["1", "2", "3", "6", "7", "14", "?"],
+        options: ["28", "16", "15", "21"],
+        correctIndex: 2,
+        insight: "Pola dengan operasi bergantian mirip program yang menjalankan dua instruksi berbeda di dalam satu perulangan."
     },
     35: {
         id: 35,
-        title: "Pola 35: Bola Olahraga Trio",
-        concept: "Tingkat: Master (Pola Trio Olahraga)",
-        instruction: "Sepak bola, basket, dan voli berulang secara teratur. Pilih bola berikutnya!",
-        sequence: ["⚽", "🏀", "🏐", "⚽", "🏀", "?"],
-        options: ["⚽", "🏀", "🏐", "🎾"],
-        correctIndex: 2,
-        insight: "Pengelompokan objek multi-kategori melatih algoritma klasifikasi data (K-Nearest Neighbors)."
+        title: "Pola 35: Bilangan Biner",
+        concept: "Tingkat Mahir · Sistem Bilangan Komputer",
+        instruction: "Komputer menghitung hanya dengan angka 0 dan 1: satu, dua, tiga, empat, lima... Berapa angka biner untuk ENAM?",
+        sequence: ["1", "10", "11", "100", "101", "?"],
+        options: ["102", "111", "1000", "110"],
+        correctIndex: 3,
+        insight: "Komputer menyimpan semua data dalam biner (0 dan 1). Biner 110 = 4 + 2 + 0 = 6 dalam bilangan desimal."
     },
     36: {
         id: 36,
-        title: "Pola 36: Sinyal Biner Double Low",
-        concept: "Tingkat: Master (Biner 0-0-1)",
-        instruction: "Dua sinyal 0 diikuti satu sinyal 1. Apa sinyal setelah sinyal 0 pertama?",
-        sequence: ["0", "0", "1", "0", "0", "1", "0", "?"],
-        options: ["0", "1", "2", "10"],
-        correctIndex: 0,
-        insight: "Pola sinyal 0-0-1 melatih sinkronisasi gelombang pulsa jam (Clock Pulse Synchronization)."
+        title: "Pola 36: Bilangan Kubik",
+        concept: "Tingkat Mahir · Bilangan n×n×n",
+        instruction: "1×1×1, 2×2×2, 3×3×3, ... Angka berapa selanjutnya?",
+        sequence: ["1", "8", "27", "64", "?"],
+        options: ["100", "81", "216", "125"],
+        correctIndex: 3,
+        insight: "Bilangan kubik adalah jumlah kubus kecil yang menyusun kubus besar, misalnya kubus Rubik 3×3×3 terdiri dari 27 kubus kecil."
     },
     37: {
         id: 37,
-        title: "Pola 37: Frame Biner Alternatif",
-        concept: "Tingkat: Master (Square Toggle)",
-        instruction: "Kotak putih bersisi hitam dan kotak hitam bersisi putih bergantian. Pilih simbol berikutnya!",
-        sequence: ["🔲", "🔳", "🔲", "🔳", "🔲", "?"],
-        options: ["🔲", "🔳", "⬛", "⬜"],
-        correctIndex: 1,
-        insight: "Pergantian pola kisi sel melatih logika render papan catur dan pemrosesan pola piksel."
+        title: "Pola 37: Selisih Mengecil",
+        concept: "Tingkat Mahir · Beda Berkurang",
+        instruction: "Selisihnya semakin kecil: -10, -9, -8, ... Angka berapa selanjutnya?",
+        sequence: ["50", "40", "31", "23", "16", "?"],
+        options: ["10", "9", "11", "8"],
+        correctIndex: 0,
+        insight: "Jika beda deret berubah secara teratur, kita perlu dua tingkat pengamatan: deret aslinya dan deret selisihnya."
     },
     38: {
         id: 38,
-        title: "Pola 38: Fibonacci Lanjutan",
-        concept: "Tingkat: Mahir Master (Fibonacci 13+8)",
-        instruction: "Jumlahkan dua angka terakhir (5+8=13, 8+13=?). Berapa hasilnya?",
-        sequence: ["1", "2", "3", "5", "8", "13", "?"],
-        options: ["18", "20", "21", "22"],
-        correctIndex: 2,
-        insight: "Fibonacci tingkat lanjut melatih rekursi dalam bahasa pemrograman modern."
+        title: "Pola 38: Huruf Kuadrat",
+        concept: "Tingkat Mahir · Posisi Abjad Berpola",
+        instruction: "Posisi huruf dalam abjad mengikuti pola 1, 4, 9, 16, ... Huruf apa selanjutnya?",
+        sequence: ["A", "D", "I", "P", "?"],
+        options: ["T", "X", "Z", "Y"],
+        correctIndex: 3,
+        insight: "Mengubah huruf menjadi angka (A=1, B=2, ...) adalah teknik representasi data. Pola tersembunyi menjadi mudah terlihat setelah datanya diubah."
     },
     39: {
         id: 39,
-        title: "Pola 39: Trio Warna Sekunder",
-        concept: "Tingkat: Master (Ungu - Oranye - Hijau)",
-        instruction: "Tiga warna sekunder berulang secara runtut. Warna apa selanjutnya?",
-        sequence: ["🟣", "🟠", "🟢", "🟣", "🟠", "?"],
-        options: ["🟣", "🟠", "🟢", "🔴"],
-        correctIndex: 2,
-        insight: "Pengolahan warna sekunder melatih pemetaan piksel RGB ke HSV pada grafik komputer."
+        title: "Pola 39: Kuadrat Kurang Satu",
+        concept: "Tingkat Mahir · Rumus n×n - 1",
+        instruction: "Bandingkan setiap angka dengan bilangan kuadrat 1, 4, 9, 16, ... Angka berapa selanjutnya?",
+        sequence: ["0", "3", "8", "15", "24", "?"],
+        options: ["36", "33", "30", "35"],
+        correctIndex: 3,
+        insight: "Banyak deret merupakan variasi dari deret yang sudah kita kenal. Membandingkannya dengan deret dasar membantu menemukan rumusnya."
     },
     40: {
         id: 40,
-        title: "Pola 40: Pembagian Bertahap (/3)",
-        concept: "Tingkat: Master (Pembagian Pembagi 3)",
-        instruction: "Setiap angka dibagi 3 (81 -> 27 -> 9 -> 3 -> ?). Berapa hasil pembagian terakhir?",
-        sequence: ["81", "27", "9", "3", "?"],
-        options: ["0", "1", "2", "1.5"],
-        correctIndex: 1,
-        insight: "Selamat! Kamu lulus tingkat Master! Algoritma pembagian bertahap adalah inti dari pencarian biner (Binary Search O(log N))."
+        title: "Pola 40: Dua Aturan Berselang",
+        concept: "Tingkat Mahir · Deret Ganda Lanjutan",
+        instruction: "Posisi ganjil dan posisi genap memiliki aturan yang BERBEDA. Angka berapa di posisi berikutnya?",
+        sequence: ["2", "100", "4", "90", "8", "80", "?"],
+        options: ["16", "70", "10", "12"],
+        correctIndex: 0,
+        insight: "Deret ini berisi dua pola sekaligus: posisi ganjil dikali 2, posisi genap dikurangi 10. Fokus pada posisi yang ditanyakan!"
     },
-
-    // --- TIER 5: LEGENDA ALGORITMA (Level 41 - 50) ---
+    // --- TINGKAT MASTER (Pola 41 - 50) ---
     41: {
         id: 41,
-        title: "Pola 41: Trio Warna Lampu",
-        concept: "Tingkat: Legenda (Siklus Lampu Lalu Lintas)",
-        instruction: "Hijau -> Merah -> Kuning. Apa warna setelah Merah di siklus ketiga?",
-        sequence: ["🟢", "🔴", "🟡", "🟢", "🔴", "🟡", "🟢", "🔴", "?"],
-        options: ["🟢", "🔴", "🟡", "🔵"],
-        correctIndex: 2,
-        insight: "Simulasi lalu lintas cerdas melatih logika mesin state terhingga (Finite State Machine / FSM)."
+        title: "Pola 41: Pangkat Dua",
+        concept: "Tingkat Master · Bilangan 2ⁿ",
+        instruction: "Deret ini sangat penting dalam dunia komputer (ukuran memori). Angka berapa selanjutnya?",
+        sequence: ["2", "4", "8", "16", "32", "64", "?"],
+        options: ["96", "120", "256", "128"],
+        correctIndex: 3,
+        insight: "Ukuran memori komputer mengikuti pangkat 2: 64 GB, 128 GB, 256 GB. Itu karena komputer bekerja dengan bilangan biner."
     },
     42: {
         id: 42,
-        title: "Pola 42: Eksponensial Biner 2^N",
-        concept: "Tingkat: Legenda (Pangkat 2 Lanjutan)",
-        instruction: "Hitung perkalian 2 lanjutan (2, 4, 8, 16, 32, ?). Berapa angka selanjutnya?",
-        sequence: ["2", "4", "8", "16", "32", "?"],
-        options: ["48", "64", "60", "56"],
-        correctIndex: 1,
-        insight: "Angka 64 adalah standar arsitektur processor modern (64-Bit System Architecture)."
+        title: "Pola 42: Deret Lucas",
+        concept: "Tingkat Master · Fibonacci Varian",
+        instruction: "Aturannya sama dengan Fibonacci (jumlah dua angka sebelumnya), tetapi angka awalnya berbeda!",
+        sequence: ["2", "1", "3", "4", "7", "11", "?"],
+        options: ["17", "15", "22", "18"],
+        correctIndex: 3,
+        insight: "Algoritma yang sama dengan data awal berbeda menghasilkan keluaran yang berbeda. Inilah alasan nilai awal (inisialisasi) sangat penting dalam program."
     },
     43: {
         id: 43,
-        title: "Pola 43: Rotasi Panah 45-Derajat",
-        concept: "Tingkat: Legenda (Vektor 45-Deg Clockwise)",
-        instruction: "Panah berputar 45 derajat searah jarum jam (Kiri Atas -> Atas -> Kanan Atas -> Kanan -> Kanan Bawah -> ?). Ke mana panah berikutnya?",
-        sequence: ["↖️", "⬆️", "↗️", "➡️", "↘️", "?"],
-        options: ["⬇️", "↙️", "⬅️", "⬆️"],
-        correctIndex: 0,
-        insight: "Rotasi halus 45-derajat melatih interpolasi gerak animasi karakter game."
+        title: "Pola 43: Kuadrat Tambah Satu",
+        concept: "Tingkat Master · Rumus n×n + 1",
+        instruction: "Bandingkan dengan bilangan kuadrat 1, 4, 9, 16, 25, ... Angka berapa selanjutnya?",
+        sequence: ["2", "5", "10", "17", "26", "?"],
+        options: ["35", "36", "38", "37"],
+        correctIndex: 3,
+        insight: "Menemukan rumus umum sebuah deret memungkinkan kita menghitung suku ke-100 langsung tanpa menulis semua suku sebelumnya."
     },
     44: {
         id: 44,
-        title: "Pola 44: Deret Bilangan Kubik (N³)",
-        concept: "Tingkat: Legenda (Pola Kubik N*N*N)",
-        instruction: "Angka pangkat tiga (1x1x1=1, 2x2x2=8, 3x3x3=27, 4x4x4=64, 5x5x5=?). Berapa hasilnya?",
-        sequence: ["1", "8", "27", "64", "?"],
-        options: ["100", "125", "150", "120"],
-        correctIndex: 1,
-        insight: "Pola kubik N³ digunakan dalam perhitung volume ruang 3D dan pemodelan objek fisik Voxel."
+        title: "Pola 44: Faktorial",
+        concept: "Tingkat Master · Perkalian Berurutan",
+        instruction: "1, 1×2, 1×2×3, 1×2×3×4, ... Angka berapa selanjutnya?",
+        sequence: ["1", "2", "6", "24", "?"],
+        options: ["48", "96", "120", "100"],
+        correctIndex: 2,
+        insight: "Faktorial menghitung banyaknya cara menyusun benda. Ada 120 cara berbeda untuk menyusun 5 buku di rak!"
     },
     45: {
         id: 45,
-        title: "Pola 45: Harta Karun Trio",
-        concept: "Tingkat: Legenda (Simbolis Trio Harta)",
-        instruction: "Berlian, mahkota, dan piala berulang secara teratur. Pilih simbol melengkapi!",
-        sequence: ["💎", "👑", "🏆", "💎", "👑", "?"],
-        options: ["💎", "👑", "🏆", "🥇"],
-        correctIndex: 2,
-        insight: "Pencocokan kombinasi objek melatih logika generator tingkat dunia otomatis (Procedural World Generation)."
+        title: "Pola 45: Deret Tribonacci",
+        concept: "Tingkat Master · Jumlah Tiga Sebelumnya",
+        instruction: "Setiap angka adalah jumlah TIGA angka sebelumnya. Angka berapa selanjutnya?",
+        sequence: ["1", "1", "2", "4", "7", "13", "?"],
+        options: ["20", "21", "26", "24"],
+        correctIndex: 3,
+        insight: "Tribonacci memperluas aturan Fibonacci. Memodifikasi algoritma yang sudah ada adalah keterampilan penting seorang programmer."
     },
     46: {
         id: 46,
-        title: "Pola 46: Deret Bertingkat (+1, +2, +3, +4...)",
-        concept: "Tingkat: Legenda (Selisih Bertambah)",
-        instruction: "Selisih angka bertambah 1 setiap kali (1+1=2, 2+2=4, 4+3=7, 7+4=11, 11+5=?). Berapa angkanya?",
-        sequence: ["1", "2", "4", "7", "11", "?"],
-        options: ["15", "16", "17", "18"],
-        correctIndex: 1,
-        insight: "Deret selisih bertingkat melatih pemikiran turunan kalkulus dasar pada simulasi fisika."
+        title: "Pola 46: Huruf Fibonacci",
+        concept: "Tingkat Master · Posisi Abjad Fibonacci",
+        instruction: "Posisi huruf dalam abjad mengikuti deret Fibonacci: 1, 1, 2, 3, 5, 8, ... Huruf apa selanjutnya?",
+        sequence: ["A", "A", "B", "C", "E", "H", "?"],
+        options: ["K", "L", "N", "M"],
+        correctIndex: 3,
+        insight: "Pola tingkat master sering menggabungkan beberapa konsep: representasi huruf sebagai angka dan deret Fibonacci."
     },
     47: {
         id: 47,
-        title: "Pola 47: Pasangan Berulang A-A-B-B-C-C",
-        concept: "Tingkat: Legenda (Pasangan Warna)",
-        instruction: "Dua merah, dua biru, dua hijau. Warna apa setelah merah pertama di siklus baru?",
-        sequence: ["🔴", "🔴", "🔵", "🔵", "🟢", "🟢", "🔴", "?"],
-        options: ["🔴", "🔵", "🟢", "🟡"],
+        title: "Pola 47: Kali Dua Tambah Satu Lagi",
+        concept: "Tingkat Master · Rumus 2×n + 1",
+        instruction: "Setiap angka dikali 2 lalu ditambah 1. Angka berapa selanjutnya?",
+        sequence: ["1", "3", "7", "15", "31", "?"],
+        options: ["63", "62", "47", "64"],
         correctIndex: 0,
-        insight: "Pola pasangan berulang melatih verifikasi enkripsi kunci simetris (Symmetric Encryption)."
+        insight: "Deret ini adalah 2ⁿ - 1. Dalam biner, angkanya selalu berisi angka 1 semua: 1, 11, 111, 1111, ..."
     },
     48: {
         id: 48,
-        title: "Pola 48: Pembagian Paruh (/2)",
-        concept: "Tingkat: Legenda (Half Value /2)",
-        instruction: "Nilai berkurang menjadi setengahnya di setiap langkah (1000 -> 500 -> 250 -> ?). Berapa hasilnya?",
-        sequence: ["1000", "500", "250", "?"],
-        options: ["100", "125", "150", "120"],
+        title: "Pola 48: Selisih Berlipat",
+        concept: "Tingkat Master · Beda Bertambah ×2",
+        instruction: "Selisih antar angka adalah 1, 2, 4, 8, ... Angka berapa selanjutnya?",
+        sequence: ["2", "3", "5", "9", "17", "?"],
+        options: ["25", "33", "32", "34"],
         correctIndex: 1,
-        insight: "Pembagian setengah nilai adalah prinsip dasar dari teknik algoritma Divide and Conquer."
+        insight: "Deret ini adalah 2ⁿ + 1. Pola pada selisih mengungkap rumus asli deretnya."
     },
     49: {
         id: 49,
-        title: "Pola 49: Rotasi Panah Matriks",
-        concept: "Tingkat: Legenda (Rotasi 90-Deg Clockwise)",
-        instruction: "Panah berputar searah jarum jam mengelilingi mata angin (Kanan -> Bawah -> Kiri -> Atas -> Kanan -> ?). Ke mana panah berikutnya?",
-        sequence: ["➡️", "⬇️", "⬅️", "⬆️", "➡️", "?"],
-        options: ["➡️", "⬇️", "⬅️", "⬆️"],
+        title: "Pola 49: Pasangan Angka dan Kuadrat",
+        concept: "Tingkat Master · Deret Berpasangan",
+        instruction: "Angka muncul berpasangan: sebuah angka, lalu hasil kuadratnya. Angka berapa selanjutnya?",
+        sequence: ["1", "1", "2", "4", "3", "9", "4", "16", "?"],
+        options: ["25", "5", "20", "6"],
         correctIndex: 1,
-        insight: "Rotasi matriks melatih logika navigasi kompas dan sistem penentuan posisi GPS."
+        insight: "Data sering tersimpan berpasangan (kunci dan nilai). Mengenali struktur data adalah kunci memahami polanya."
     },
     50: {
         id: 50,
-        title: "Pola 50: Deret Segitiga Legenda",
-        concept: "Tingkat: Legenda Algoritma (Triangular Numbers)",
-        instruction: "Tantangan Puncak Legenda! Penjumlahan akumulatif (1, 1+2=3, 3+3=6, 6+4=10, 10+5=15, 15+6=21, 21+7=?). Berapa angka penutup legenda?",
-        sequence: ["1", "3", "6", "10", "15", "21", "?"],
-        options: ["27", "28", "29", "30"],
-        correctIndex: 1,
-        insight: "LUAR BIASA! 🏆 Kamu telah menguasai seluruh 50 Level Mode Pengenalan Pola! Kamu adalah seorang Master Computational Thinking sejati!"
+        title: "Pola 50: Baca dan Ucapkan",
+        concept: "Tingkat Master · Pola Legendaris Look-and-Say",
+        instruction: "Tantangan terakhir! Setiap angka 'membaca' angka sebelumnya. 1 dibaca 'satu angka 1' → 11. 11 dibaca 'dua angka 1' → 21. 21 dibaca 'satu 2, satu 1' → 1211. Lanjutkan!",
+        sequence: ["1", "11", "21", "1211", "111221", "?"],
+        options: ["312211", "1112221", "211221", "13112221"],
+        correctIndex: 0,
+        insight: "Selamat, kamu telah menaklukkan semua 50 pola! Pola look-and-say menunjukkan bahwa sebuah aturan bisa berupa proses (algoritma), bukan sekadar rumus matematika."
     }
 };
 
@@ -1777,19 +1776,20 @@ function renderModeCardProgress(el, completedArr, total, unit) {
 function renderProgressPanel(el, options) {
     if (!el) return;
     const { title, unit, completedArr, total, currentId } = options;
+    const tierSize = options.tierSize || 5;
     const done = countCompleted(completedArr, 1, total);
     const pct = progressPercent(done, total);
 
     let chips = '';
-    for (let start = 1; start <= total; start += 5) {
-        const end = Math.min(start + 4, total);
-        const tier = getLevelTier(start);
+    for (let start = 1; start <= total; start += tierSize) {
+        const end = Math.min(start + tierSize - 1, total);
+        const tier = getLevelTier(start, tierSize);
         const tierDone = countCompleted(completedArr, start, end);
-        const tierSize = end - start + 1;
+        const tierCount = end - start + 1;
         const classes = ['tier-chip'];
-        if (tierDone >= tierSize) classes.push('complete');
+        if (tierDone >= tierCount) classes.push('complete');
         if (currentId && currentId >= start && currentId <= end) classes.push('current');
-        chips += `<span class="${classes.join(' ')}" title="${unit} ${start} - ${end}">${tier.icon} ${tier.name} <strong>${tierDone}/${tierSize}</strong></span>`;
+        chips += `<span class="${classes.join(' ')}" title="${unit} ${start} - ${end}">${tier.icon} ${tier.name} <strong>${tierDone}/${tierCount}</strong></span>`;
     }
 
     el.innerHTML = `
@@ -1817,6 +1817,12 @@ function updateProgressDisplays() {
     renderProgressPanel(dom.puzzleProgressPanel, {
         title: `🧩 Teka-Teki ${currentPuzzleLevel} dari ${totalPuzzles}`, unit: 'teka-teki',
         completedArr: completedPuzzleLevels, total: totalPuzzles, currentId: currentPuzzleLevel
+    });
+
+    renderProgressPanel(dom.patternProgressPanel, {
+        title: `🎨 Pola ${currentPatternLevel} dari ${totalPatterns}`, unit: 'pola',
+        completedArr: completedPatternLevels, total: totalPatterns, currentId: currentPatternLevel,
+        tierSize: PATTERN_TIER_SIZE
     });
 
     if (dom.arenaLevelProgress) {
@@ -1918,7 +1924,14 @@ function renderPatternLevelSelect() {
     dom.patternLevelSelect.innerHTML = '';
     const totalPatterns = Object.keys(PATTERN_LEVELS).length;
 
+    let group = null;
     for (let i = 1; i <= totalPatterns; i++) {
+        if ((i - 1) % PATTERN_TIER_SIZE === 0) {
+            const tier = getLevelTier(i, PATTERN_TIER_SIZE);
+            group = document.createElement('optgroup');
+            group.label = `${tier.icon} ${tier.name}`;
+            dom.patternLevelSelect.appendChild(group);
+        }
         const opt = document.createElement('option');
         opt.value = i;
         const isUnlocked = isPatternLevelUnlocked(i);
@@ -1930,7 +1943,7 @@ function renderPatternLevelSelect() {
         if (i === currentPatternLevel) {
             opt.selected = true;
         }
-        dom.patternLevelSelect.appendChild(opt);
+        group.appendChild(opt);
     }
 }
 
@@ -2028,6 +2041,7 @@ const dom = {
     patternModeProgress: document.getElementById('pattern-mode-progress'),
     mazeProgressPanel: document.getElementById('maze-progress-panel'),
     puzzleProgressPanel: document.getElementById('puzzle-progress-panel'),
+    patternProgressPanel: document.getElementById('pattern-progress-panel'),
     arenaLevelProgress: document.getElementById('arena-level-progress'),
     quizLockedCard: document.getElementById('quiz-locked-card'),
     quizUnlockedCard: document.getElementById('quiz-unlocked-card'),
@@ -3619,8 +3633,9 @@ function loadPatternLevel(levelId) {
 
     dom.patternLevelTitle.innerText = lvl.title;
     dom.patternLevelTag.innerText = lvl.concept;
+    dom.patternLevelTag.className = `level-concept-tag ${['seq', 'loop', 'cond', 'debug', 'cond'][Math.ceil(levelId / PATTERN_TIER_SIZE) - 1] || 'seq'}`;
     dom.patternIntroText.innerText = lvl.instruction;
-    dom.patternLevelCounter.innerText = `Pola ${levelId} dari ${Object.keys(PATTERN_LEVELS).length}`;
+    dom.patternLevelCounter.innerText = `Pola ${levelId} dari ${Object.keys(PATTERN_LEVELS).length} · Tingkat ${getLevelTier(levelId, PATTERN_TIER_SIZE).name}`;
 
     renderPatternWorkspace();
     showScreen('pattern-game-page');
