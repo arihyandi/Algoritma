@@ -1849,3 +1849,152 @@ body {
         min-height: 300px;
     }
 }
+
+/* ==========================================================================
+   PROGRESS DISPLAY (jumlah level selesai)
+   ========================================================================== */
+.progress-track {
+    display: block;
+    width: 100%;
+    height: 6px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.progress-track.large {
+    height: 10px;
+}
+
+.progress-track-fill {
+    display: block;
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--color-cyan), var(--color-purple));
+    transition: width 0.6s ease;
+}
+
+/* Kartu mode di menu utama */
+.mode-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 100%;
+    margin-top: 0.25rem;
+}
+
+.mode-progress-text {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+}
+
+.mode-progress-text strong {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+#maze-mode-progress .progress-track-fill {
+    background: var(--color-cyan);
+}
+
+#puzzle-mode-progress .progress-track-fill {
+    background: var(--color-purple);
+}
+
+#pattern-mode-progress .progress-track-fill {
+    background: var(--color-green);
+}
+
+.mode-progress.complete .mode-progress-text {
+    color: var(--color-green);
+}
+
+/* Panel progres di daftar misi Maze dan halaman Puzzle */
+.mode-progress-panel {
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.progress-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.progress-panel-title {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.progress-panel-count {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.progress-panel-count strong {
+    color: var(--color-cyan);
+    font-size: 1.1rem;
+}
+
+.tier-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tier-chip {
+    font-size: 0.78rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 99px;
+    border: 1px solid var(--panel-border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-secondary);
+}
+
+.tier-chip strong {
+    color: var(--text-primary);
+}
+
+.tier-chip.complete {
+    border-color: rgba(16, 185, 129, 0.5);
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--color-green);
+}
+
+.tier-chip.current {
+    border-color: var(--color-cyan);
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.25);
+    color: var(--text-primary);
+}
+
+/* Keterangan "Misi X dari 25" di arena Maze */
+.arena-level-progress {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+}
+
+@media print {
+    .mode-progress-panel {
+        display: none !important;
+    }
+}
+
+/* Header halaman Puzzle/Pola tidak terpotong di layar HP */
+@media (max-width: 600px) {
+    .page-header {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    .page-header > div:last-child {
+        width: 100%;
+    }
+    .page-header select {
+        width: 100%;
+    }
+}
