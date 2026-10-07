@@ -49,6 +49,7 @@
                         <span class="mode-icon">🗺️</span>
                         <h3>Mode Labirin (Maze)</h3>
                         <p>Bantu Albi mencapai portal melalui 25 level logika pemrograman, dari Pemula hingga Master!</p>
+                        <span class="mode-progress" id="maze-mode-progress"></span>
                         <span class="mode-action-btn">Mulai Main →</span>
                     </button>
                     <button class="mode-card glass-panel" id="mode-puzzle-btn">
@@ -56,6 +57,7 @@
                         <span class="mode-icon">🧩</span>
                         <h3>Mode Teka-Teki (Puzzle)</h3>
                         <p>Asah logikamu dengan mengurutkan potongan blok algoritma melalui 25 teka-teki bertingkat!</p>
+                        <span class="mode-progress" id="puzzle-mode-progress"></span>
                         <span class="mode-action-btn">Mulai Main →</span>
                     </button>
                     <button class="mode-card glass-panel" id="mode-pattern-btn">
@@ -63,6 +65,7 @@
                         <span class="mode-icon">🎨</span>
                         <h3>Mode Pengenalan Pola</h3>
                         <p>Latih pemikiran komputasional melalui 50 level bertingkat dari Pemula hingga Legenda!</p>
+                        <span class="mode-progress" id="pattern-mode-progress"></span>
                         <span class="mode-action-btn">Mulai Main →</span>
                     </button>
                     <button class="mode-card glass-panel mode-card-cert locked" id="mode-cert-btn">
@@ -92,6 +95,9 @@
                 <h2>Pilih Misi Pembelajaran</h2>
                 <div style="width: 100px;"></div> <!-- Spacer -->
             </header>
+
+            <!-- Ringkasan progres Mode Maze (diisi oleh updateProgressDisplays() di app.js) -->
+            <div class="mode-progress-panel glass-panel" id="maze-progress-panel"></div>
 
             <div class="levels-grid">
                 <!-- Kartu level dibuat otomatis oleh renderLevelsSelector() di app.js -->
@@ -130,6 +136,7 @@
                     <div>
                         <h2 id="current-level-title">Misi 1: Langkah Pertama</h2>
                         <div class="level-concept-tag" id="current-level-tag">Konsep: Sekuensial</div>
+                        <div class="arena-level-progress" id="arena-level-progress"></div>
                     </div>
                 </div>
 
@@ -320,6 +327,9 @@
                     </select>
                 </div>
             </header>
+
+            <!-- Ringkasan progres Mode Puzzle (diisi oleh updateProgressDisplays() di app.js) -->
+            <div class="mode-progress-panel glass-panel" id="puzzle-progress-panel"></div>
 
             <div class="quiz-card glass-panel" style="margin-top: 0; padding: 2rem;">
                 <div class="level-instructions" id="puzzle-intro-text" style="margin-bottom: 1.5rem;">

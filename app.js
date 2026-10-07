@@ -1746,6 +1746,83 @@ function saveProgress() {
     } catch (e) {
         console.warn('Gagal menyimpan progres:', e);
     }
+    updateProgressDisplays();
+}
+
+/* ==========================================================================
+   PROGRESS DISPLAY: jumlah level selesai di menu utama, daftar misi & puzzle
+   ========================================================================== */
+// Number of distinct completed levels between fromId and toId (inclusive)
+function countCompleted(completedArr, fromId, toId) {
+    return new Set(completedArr.filter(id => id >= fromId && id <= toId)).size;
+}
+
+function progressPercent(done, total) {
+    return total > 0 ? Math.round((done / total) * 100) : 0;
+}
+
+// Small "X / N level selesai" line + bar on the landing page mode cards
+function renderModeCardProgress(el, completedArr, total, unit) {
+    if (!el) return;
+    const done = countCompleted(completedArr, 1, total);
+    const pct = progressPercent(done, total);
+    el.classList.toggle('complete', done >= total);
+    el.innerHTML = `
+        <span class="mode-progress-text">${done >= total ? '✅ ' : ''}<strong>${done}</strong> / ${total} ${unit} selesai</span>
+        <span class="progress-track"><span class="progress-track-fill" style="width: ${pct}%"></span></span>
+    `;
+}
+
+// Full panel: total progress, bar, and one chip per difficulty tier
+function renderProgressPanel(el, options) {
+    if (!el) return;
+    const { title, unit, completedArr, total, currentId } = options;
+    const done = countCompleted(completedArr, 1, total);
+    const pct = progressPercent(done, total);
+
+    let chips = '';
+    for (let start = 1; start <= total; start += 5) {
+        const end = Math.min(start + 4, total);
+        const tier = getLevelTier(start);
+        const tierDone = countCompleted(completedArr, start, end);
+        const tierSize = end - start + 1;
+        const classes = ['tier-chip'];
+        if (tierDone >= tierSize) classes.push('complete');
+        if (currentId && currentId >= start && currentId <= end) classes.push('current');
+        chips += `<span class="${classes.join(' ')}" title="${unit} ${start} - ${end}">${tier.icon} ${tier.name} <strong>${tierDone}/${tierSize}</strong></span>`;
+    }
+
+    el.innerHTML = `
+        <div class="progress-panel-header">
+            <span class="progress-panel-title">${title}</span>
+            <span class="progress-panel-count"><strong>${done}</strong> / ${total} ${unit} selesai · ${pct}%</span>
+        </div>
+        <div class="progress-track large"><div class="progress-track-fill" style="width: ${pct}%"></div></div>
+        <div class="tier-chips">${chips}</div>
+    `;
+}
+
+function updateProgressDisplays() {
+    const totalPuzzles = Object.keys(PUZZLE_LEVELS).length;
+    const totalPatterns = Object.keys(PATTERN_LEVELS).length;
+
+    renderModeCardProgress(dom.mazeModeProgress, completedLevels, TOTAL_MAZE_LEVELS, 'level');
+    renderModeCardProgress(dom.puzzleModeProgress, completedPuzzleLevels, totalPuzzles, 'level');
+    renderModeCardProgress(dom.patternModeProgress, completedPatternLevels, totalPatterns, 'level');
+
+    renderProgressPanel(dom.mazeProgressPanel, {
+        title: '🗺️ Progres Mode Labirin', unit: 'misi',
+        completedArr: completedLevels, total: TOTAL_MAZE_LEVELS
+    });
+    renderProgressPanel(dom.puzzleProgressPanel, {
+        title: `🧩 Teka-Teki ${currentPuzzleLevel} dari ${totalPuzzles}`, unit: 'teka-teki',
+        completedArr: completedPuzzleLevels, total: totalPuzzles, currentId: currentPuzzleLevel
+    });
+
+    if (dom.arenaLevelProgress) {
+        const done = countCompleted(completedLevels, 1, TOTAL_MAZE_LEVELS);
+        dom.arenaLevelProgress.innerText = `Misi ${currentLevel} dari ${TOTAL_MAZE_LEVELS} · ${done}/${TOTAL_MAZE_LEVELS} misi selesai`;
+    }
 }
 
 function loadProgress() {
@@ -1872,6 +1949,7 @@ function resetAllProgress() {
         if (dom.displayCertName) dom.displayCertName.innerText = '';
         renderLevelsSelector();
         updateCertificateCard();
+        updateProgressDisplays();
         alert("Progres game berhasil direset ke awal.");
     }
 }
@@ -1945,6 +2023,12 @@ const dom = {
     resetProgressBtn: document.getElementById('reset-progress-btn'),
 
     levelsGrid: document.querySelector('.levels-grid'),
+    mazeModeProgress: document.getElementById('maze-mode-progress'),
+    puzzleModeProgress: document.getElementById('puzzle-mode-progress'),
+    patternModeProgress: document.getElementById('pattern-mode-progress'),
+    mazeProgressPanel: document.getElementById('maze-progress-panel'),
+    puzzleProgressPanel: document.getElementById('puzzle-progress-panel'),
+    arenaLevelProgress: document.getElementById('arena-level-progress'),
     quizLockedCard: document.getElementById('quiz-locked-card'),
     quizUnlockedCard: document.getElementById('quiz-unlocked-card'),
     startQuizBtn: document.getElementById('start-quiz-btn'),
@@ -2056,6 +2140,7 @@ const SVGS = {
    ========================================================================== */
 function initApp() {
     loadProgress();
+    updateProgressDisplays();
     setupEventListeners();
     renderLevelsSelector();
     updateAudioIcon();
@@ -2071,6 +2156,7 @@ function setupEventListeners() {
     // Navigation - Game Mode Selection
     dom.modeMazeBtn.addEventListener('click', () => {
         synth.playClick();
+        renderLevelsSelector(); // refresh completed stamps & tier counts
         showScreen('level-selector-page');
     });
 
@@ -2310,7 +2396,10 @@ function renderLevelsSelector() {
             const tier = getLevelTier(id);
             const heading = document.createElement('div');
             heading.className = 'level-tier-heading';
-            heading.innerText = `${tier.icon} Tingkat ${tier.name} · Misi ${id} - ${Math.min(id + 4, TOTAL_MAZE_LEVELS)}`;
+            const tierEnd = Math.min(id + 4, TOTAL_MAZE_LEVELS);
+            const tierDone = countCompleted(completedLevels, id, tierEnd);
+            const tierSize = tierEnd - id + 1;
+            heading.innerText = `${tier.icon} Tingkat ${tier.name} · Misi ${id} - ${tierEnd} · ${tierDone}/${tierSize} selesai${tierDone >= tierSize ? ' ✅' : ''}`;
             dom.levelsGrid.appendChild(heading);
         }
         const isUnlocked = id === 1 || completedLevels.includes(id - 1);
@@ -2392,6 +2481,7 @@ function loadLevel(levelId) {
         workspaceBlocks = lvl.debuggingSetup.map((b, idx) => buildSetupBlock(b, idx));
     }
 
+    updateProgressDisplays();
     renderToolbox(lvl.allowedBlocks);
     renderWorkspace();
     resetSimulation();
