@@ -25,8 +25,120 @@
     <!-- STAR BACKGROUND EFFECT -->
     <div class="stars-bg"></div>
 
+    <!-- 0. HALAMAN DATA DIRI (pertama kali dibuka) -->
+    <div id="register-page" class="view-screen active">
+        <div class="hero-container">
+            <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo school-logo-hero">
+            <div class="hero-logo">
+                <div class="logo-icon">🤖</div>
+                <h1>AlgoQuest</h1>
+                <p class="tagline">Petualangan Belajar Algoritma & Logika</p>
+            </div>
+
+            <form class="register-card glass-panel" id="register-form" novalidate>
+                <h2>📝 Isi Data Diri</h2>
+                <p class="register-intro">Sebelum mulai bermain, tuliskan nama lengkap dan kelasmu agar Bapak/Ibu Guru
+                    dapat melihat perkembangan belajarmu.</p>
+
+                <label class="register-field" for="reg-name">
+                    <span>Nama Lengkap</span>
+                    <input type="text" id="reg-name" maxlength="40" autocomplete="off" placeholder="contoh: Budi Santoso">
+                </label>
+                <label class="register-field" for="reg-class">
+                    <span>Kelas</span>
+                    <input type="text" id="reg-class" maxlength="15" autocomplete="off" placeholder="contoh: 7A">
+                </label>
+
+                <div class="register-error hidden" id="register-error" role="alert"></div>
+
+                <button type="submit" class="btn btn-primary btn-glow register-submit">Mulai Bermain →</button>
+
+                <div class="known-players hidden" id="known-players">
+                    <span class="known-players-title">Pernah bermain di perangkat ini? Pilih namamu:</span>
+                    <div class="known-players-list" id="known-players-list"></div>
+                </div>
+            </form>
+
+            <button type="button" class="teacher-link open-teacher-panel">🔒 Panel Guru</button>
+        </div>
+    </div>
+
+    <!-- PANEL GURU: rekap siswa di perangkat ini + unduh Excel (teacher-panel.js) -->
+    <div id="teacher-page" class="view-screen">
+        <div class="container medium-container">
+            <header class="page-header" style="margin-bottom: 1.5rem;">
+                <div class="header-brand">
+                    <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo">
+                    <button type="button" class="btn btn-secondary" id="teacher-back-btn">← Kembali</button>
+                </div>
+                <h2>🔒 Panel Guru</h2>
+                <div style="width: 56px;"></div>
+            </header>
+
+            <!-- Belum ada PIN: guru membuat PIN -->
+            <form class="register-card glass-panel hidden" id="teacher-setup-form" novalidate>
+                <h2>Buat PIN Guru</h2>
+                <p class="register-intro">PIN melindungi rekap data siswa agar hanya guru yang bisa membukanya.
+                    Buat PIN minimal 6 karakter dan simpan baik-baik.</p>
+                <label class="register-field" for="teacher-new-pin">
+                    <span>PIN Baru</span>
+                    <input type="password" id="teacher-new-pin" autocomplete="new-password" maxlength="40">
+                </label>
+                <label class="register-field" for="teacher-new-pin-repeat">
+                    <span>Ulangi PIN</span>
+                    <input type="password" id="teacher-new-pin-repeat" autocomplete="new-password" maxlength="40">
+                </label>
+                <div class="register-error hidden" id="teacher-setup-error" role="alert"></div>
+                <button type="submit" class="btn btn-primary btn-glow register-submit">Simpan PIN</button>
+            </form>
+
+            <!-- Sudah ada PIN: guru memasukkan PIN -->
+            <form class="register-card glass-panel hidden" id="teacher-lock-form" novalidate>
+                <h2>Masukkan PIN Guru</h2>
+                <p class="register-intro">Halaman ini berisi data seluruh siswa yang bermain di perangkat ini.</p>
+                <label class="register-field" for="teacher-pin-input">
+                    <span>PIN Guru</span>
+                    <input type="password" id="teacher-pin-input" autocomplete="current-password" maxlength="40">
+                </label>
+                <div class="register-error hidden" id="teacher-pin-error" role="alert"></div>
+                <button type="submit" class="btn btn-primary btn-glow register-submit">Buka Panel</button>
+            </form>
+
+            <!-- Rekap siswa -->
+            <div class="glass-panel teacher-dashboard hidden" id="teacher-dashboard">
+                <div class="teacher-config-hint hidden" id="teacher-config-hint">
+                    ✅ PIN tersimpan di perangkat ini. Agar PIN yang sama berlaku di <b>semua perangkat</b>,
+                    salin baris berikut ke file <code>config.js</code>:
+                    <code class="teacher-config-hash" id="teacher-config-hash"></code>
+                </div>
+                <div class="teacher-toolbar">
+                    <div>
+                        <h3>📋 Rekap Siswa di Perangkat Ini</h3>
+                        <div class="teacher-stats" id="teacher-stats"></div>
+                    </div>
+                    <div class="teacher-actions">
+                        <select id="teacher-class-filter" class="btn btn-secondary teacher-filter" aria-label="Saring kelas"></select>
+                        <button type="button" class="btn btn-success btn-glow" id="teacher-download-btn">⬇️ Unduh Rekap (.xlsx)</button>
+                        <button type="button" class="btn btn-secondary" id="teacher-lock-btn">🔒 Kunci</button>
+                    </div>
+                </div>
+                <div class="teacher-table-wrap">
+                    <table class="teacher-table">
+                        <thead>
+                            <tr><th>No</th><th>Nama</th><th>Kelas</th><th>Maze</th><th>Teka-Teki</th><th>Pola</th><th>Total</th><th>Kuis</th><th>Lulus</th><th>Sertifikat</th><th>Terakhir Aktif</th></tr>
+                        </thead>
+                        <tbody id="teacher-table-body"></tbody>
+                    </table>
+                </div>
+                <p class="teacher-empty hidden" id="teacher-empty-note">Belum ada siswa yang bermain di perangkat ini.</p>
+                <p class="teacher-note">💡 Data ini tersimpan di perangkat ini saja. Untuk komputer lab, buka Panel Guru di
+                    setiap komputer lalu unduh rekapnya.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- 1. LANDING PAGE -->
-    <div id="landing-page" class="view-screen active">
+    <div id="landing-page" class="view-screen">
         <div class="hero-container">
             <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo school-logo-hero">
             <div class="hero-logo">
@@ -36,6 +148,10 @@
             </div>
 
             <div class="hero-card glass-panel">
+                <div class="player-badge">
+                    <span>👋 Halo, <strong id="player-badge-name">Pemain</strong> · Kelas <strong id="player-badge-class">-</strong></span>
+                    <button type="button" class="btn btn-secondary switch-player-btn" id="switch-player-btn">🔁 Ganti Pemain</button>
+                </div>
                 <p>Selamat datang di <strong>AlgoQuest</strong>! Di sini kamu akan belajar dasar-dasar pemrograman
                     dengan membantu <strong>Albi si Robot</strong> menjelajahi laboratorium siber melalui rangkaian
                     instruksi terstruktur.</p>
@@ -83,6 +199,10 @@
                     <button class="btn btn-secondary" id="reset-progress-btn"
                         style="font-size: 0.8rem; padding: 0.4rem 0.9rem; opacity: 0.75;">
                         🔄 Reset Progres Game
+                    </button>
+                    <button type="button" class="btn btn-secondary open-teacher-panel"
+                        style="font-size: 0.8rem; padding: 0.4rem 0.9rem; opacity: 0.75; margin-left: 0.5rem;">
+                        🔒 Panel Guru
                     </button>
                 </div>
             </div>
@@ -462,7 +582,9 @@
     </div>
 
     <!-- Load game script AFTER all DOM elements are rendered -->
+    <script src="config.js"></script>
     <script src="app.js"></script>
+    <script src="teacher-panel.js"></script>
 </body>
 
 </html>
