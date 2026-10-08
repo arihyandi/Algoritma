@@ -1951,10 +1951,28 @@ function flushPendingReports() {
     });
 }
 
+// Local activity log on this device, read by the Teacher Panel (teacher-panel.js)
+const ACTIVITY_LOG_KEY = 'algoquest_activity_log_v1';
+const MAX_ACTIVITY_LOG = 5000;
+
+function appendActivityLog(report) {
+    const log = readStoredJSON(ACTIVITY_LOG_KEY, []);
+    const list = Array.isArray(log) ? log : [];
+    list.push({
+        waktu: report.waktu, id: report.id, nama: report.nama, kelas: report.kelas,
+        aktivitas: report.aktivitas, detail: report.detail,
+        maze: report.maze, puzzle: report.puzzle, pola: report.pola
+    });
+    writeStoredJSON(ACTIVITY_LOG_KEY, list.slice(-MAX_ACTIVITY_LOG));
+}
+
 function reportToTeacher(activity, detail) {
-    const url = getTeacherSheetUrl();
-    if (!url || !currentPlayer) return;
+    if (!currentPlayer) return;
     const report = buildReport(activity, detail);
+    appendActivityLog(report);
+
+    const url = getTeacherSheetUrl();
+    if (!url) return;
     flushPendingReports();
     try {
         sendReport(url, report).catch(() => queuePendingReport(report));

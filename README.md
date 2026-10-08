@@ -41,7 +41,11 @@ Setelah lulus kuis, siswa mengetik nama lengkap dan dapat **mencetak / menyimpan
 
 Saat pertama kali membuka game, siswa **mengisi nama lengkap dan kelas**. Progres setiap siswa tersimpan terpisah, sehingga satu komputer lab bisa dipakai bergantian (tombol **🔁 Ganti Pemain** di menu utama).
 
-Jika guru memasang database, setiap progres (level selesai, nilai kuis, sertifikat) otomatis tercatat di **Google Spreadsheet milik guru**, yang hanya bisa dilihat oleh guru. Panduan pemasangan: [`panduan-guru/PANDUAN-DATABASE.md`](panduan-guru/PANDUAN-DATABASE.md).
+Guru dapat melihat siapa saja yang sudah mengerjakan dengan dua cara:
+- **🔒 Panel Guru + Excel (tanpa internet):** dilindungi PIN guru. Panel ini menampilkan rekap siswa di perangkat tersebut dan menyediakan tombol **Unduh Rekap (.xlsx)**.
+- **Google Spreadsheet otomatis (opsional):** progres dari semua perangkat tercatat di spreadsheet pribadi milik guru.
+
+Panduan lengkap: [`panduan-guru/PANDUAN-DATABASE.md`](panduan-guru/PANDUAN-DATABASE.md).
 
 ## Cara Menjalankan
 
@@ -69,7 +73,8 @@ Jika guru memasang database, setiap progres (level selesai, nilai kuis, sertifik
 index.html   Struktur halaman (menu, arena, kuis, sertifikat)
 style.css    Tampilan, tata letak responsif, dan gaya cetak sertifikat
 app.js       Logika game dan data soal
-config.js    URL database guru (Google Apps Script), kosongkan jika tidak dipakai
+teacher-panel.js  Panel Guru: rekap siswa, PIN, dan pembuat file Excel (.xlsx)
+config.js    Pengaturan guru: URL Google Spreadsheet (opsional) & PIN Panel Guru
 panduan-guru/  Skrip Google Apps Script & panduan pemasangan database guru
 ```
 
