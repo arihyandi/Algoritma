@@ -1730,6 +1730,239 @@ let completedLevels = [];
    ========================================================================== */
 const STORAGE_KEY = 'algoquest_game_progress_v1';
 
+/* ==========================================================================
+   DATA DIRI PEMAIN (nama & kelas) + progres terpisah untuk setiap pemain,
+   sehingga satu komputer lab bisa dipakai bergantian oleh banyak siswa.
+   ========================================================================== */
+const PLAYERS_KEY = 'algoquest_players_v1';           // daftar pemain di perangkat ini
+const ACTIVE_PLAYER_KEY = 'algoquest_active_player_v1';
+let currentPlayer = null;  // { id, name, kelas, registeredAt }
+let lastQuizScore = null;  // nilai kuis terakhir (untuk laporan guru)
+
+function readStoredJSON(key, fallback) {
+    try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+    } catch (e) {
+        return fallback;
+    }
+}
+
+function writeStoredJSON(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+        console.warn('Gagal menyimpan data:', e);
+    }
+}
+
+function progressStorageKey() {
+    return currentPlayer ? `${STORAGE_KEY}_${currentPlayer.id}` : STORAGE_KEY;
+}
+
+function getKnownPlayers() {
+    const list = readStoredJSON(PLAYERS_KEY, []);
+    return Array.isArray(list) ? list.filter(p => p && p.id && p.name && p.kelas) : [];
+}
+
+function cleanPlayerText(text) {
+    return String(text || '').replace(/\s+/g, ' ').trim();
+}
+
+// "budi santoso" -> "Budi Santoso" so the teacher's list stays tidy
+function capitalizeWords(text) {
+    return text.split(' ').map(w => w.charAt(0).toLocaleUpperCase('id-ID') + w.slice(1)).join(' ');
+}
+
+// Returns an error message, or '' when the name & class are valid
+function validatePlayerInput(name, kelas) {
+    if (name.length < 3) return 'Nama lengkap minimal 3 huruf.';
+    if (!/^[\p{L} .'-]+$/u.test(name)) return 'Nama hanya boleh berisi huruf, spasi, titik, tanda petik, dan tanda hubung.';
+    if (!kelas) return 'Kelas wajib diisi, contoh: 7A.';
+    if (!/^[\p{L}\p{N} .\/-]+$/u.test(kelas)) return 'Kelas hanya boleh berisi huruf, angka, spasi, titik, garis miring, dan tanda hubung.';
+    return '';
+}
+
+function makePlayerId() {
+    if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+        return window.crypto.randomUUID();
+    }
+    return 'p-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+}
+
+function registerPlayer(name, kelas) {
+    const players = getKnownPlayers();
+    let player = players.find(p => p.name.toLowerCase() === name.toLowerCase() && p.kelas.toLowerCase() === kelas.toLowerCase());
+    const isNew = !player;
+
+    if (isNew) {
+        player = { id: makePlayerId(), name, kelas, registeredAt: new Date().toISOString() };
+        // Progres lama (dari sebelum ada halaman data diri) diwariskan ke pemain pertama di perangkat ini
+        if (players.length === 0) {
+            try {
+                const legacy = localStorage.getItem(STORAGE_KEY);
+                if (legacy) {
+                    localStorage.setItem(`${STORAGE_KEY}_${player.id}`, legacy);
+                    localStorage.removeItem(STORAGE_KEY);
+                }
+            } catch (e) {}
+        }
+        players.push(player);
+        writeStoredJSON(PLAYERS_KEY, players);
+    }
+
+    activatePlayer(player);
+    reportToTeacher(isNew ? 'Mendaftar & mulai bermain' : 'Masuk kembali');
+}
+
+// Switches the game to the given player and loads that player's own progress
+function activatePlayer(player) {
+    currentPlayer = player;
+    try {
+        localStorage.setItem(ACTIVE_PLAYER_KEY, player.id);
+    } catch (e) {}
+
+    completedLevels = [];
+    completedPuzzleLevels = [];
+    completedPatternLevels = [];
+    currentLevel = 1;
+    currentPuzzleLevel = 1;
+    currentPatternLevel = 1;
+    mazeQuizCompleted = false;
+    lastQuizScore = null;
+    if (dom.displayCertName) dom.displayCertName.innerText = '';
+
+    loadProgress();
+    renderPlayerBadge();
+    renderLevelsSelector();
+    updateCertificateCard();
+    updateProgressDisplays();
+    showScreen('landing-page');
+}
+
+function restoreActivePlayer() {
+    let activeId = null;
+    try {
+        activeId = localStorage.getItem(ACTIVE_PLAYER_KEY);
+    } catch (e) {}
+    const player = getKnownPlayers().find(p => p.id === activeId);
+    if (player) {
+        activatePlayer(player);
+        return true;
+    }
+    return false;
+}
+
+function renderPlayerBadge() {
+    if (!currentPlayer) return;
+    dom.playerBadgeName.innerText = currentPlayer.name;
+    dom.playerBadgeClass.innerText = currentPlayer.kelas;
+}
+
+function showRegisterPage() {
+    dom.regName.value = '';
+    dom.regClass.value = '';
+    dom.registerError.classList.add('hidden');
+
+    // Quick-pick buttons for students who already played on this device
+    const players = getKnownPlayers();
+    dom.knownPlayersList.innerHTML = '';
+    players.forEach(p => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'known-player-btn';
+        btn.innerText = `${p.name} · ${p.kelas}`;
+        btn.addEventListener('click', () => {
+            synth.playClick();
+            dom.regName.value = p.name;
+            dom.regClass.value = p.kelas;
+            dom.registerError.classList.add('hidden');
+        });
+        dom.knownPlayersList.appendChild(btn);
+    });
+    dom.knownPlayers.classList.toggle('hidden', players.length === 0);
+
+    showScreen('register-page');
+    dom.regName.focus();
+}
+
+/* ==========================================================================
+   LAPORAN KE DATABASE GURU (Google Spreadsheet via Google Apps Script)
+   Game hanya MENGIRIM ringkasan progres. Data tidak pernah dibaca kembali,
+   sehingga daftar siswa hanya bisa dilihat guru di spreadsheet miliknya.
+   ========================================================================== */
+const PENDING_REPORTS_KEY = 'algoquest_pending_reports_v1';
+const MAX_PENDING_REPORTS = 50;
+
+function getTeacherSheetUrl() {
+    const config = window.ALGOQUEST_CONFIG || {};
+    return typeof config.SHEET_URL === 'string' ? config.SHEET_URL.trim() : '';
+}
+
+function buildReport(activity, detail) {
+    const totalPuzzles = Object.keys(PUZZLE_LEVELS).length;
+    const totalPatterns = Object.keys(PATTERN_LEVELS).length;
+    const certName = dom.displayCertName ? dom.displayCertName.innerText.trim() : '';
+    return {
+        id: currentPlayer.id,
+        nama: currentPlayer.name,
+        kelas: currentPlayer.kelas,
+        maze: countCompleted(completedLevels, 1, TOTAL_MAZE_LEVELS),
+        mazeTotal: TOTAL_MAZE_LEVELS,
+        puzzle: countCompleted(completedPuzzleLevels, 1, totalPuzzles),
+        puzzleTotal: totalPuzzles,
+        pola: countCompleted(completedPatternLevels, 1, totalPatterns),
+        polaTotal: totalPatterns,
+        kuis: lastQuizScore,
+        kuisTotal: QUIZ_QUESTIONS.length,
+        lulusKuis: mazeQuizCompleted,
+        sertifikat: certName && certName !== 'Nama Peserta' ? certName : '',
+        aktivitas: activity,
+        detail: detail || '',
+        waktu: new Date().toISOString()
+    };
+}
+
+function sendReport(url, report) {
+    // text/plain avoids a CORS preflight, which Google Apps Script does not answer
+    return fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(report),
+        keepalive: true
+    });
+}
+
+// Reports that failed (e.g. no internet) are kept and sent again later
+function queuePendingReport(report) {
+    const pending = readStoredJSON(PENDING_REPORTS_KEY, []);
+    pending.push(report);
+    writeStoredJSON(PENDING_REPORTS_KEY, pending.slice(-MAX_PENDING_REPORTS));
+}
+
+function flushPendingReports() {
+    const url = getTeacherSheetUrl();
+    const pending = readStoredJSON(PENDING_REPORTS_KEY, []);
+    if (!url || !Array.isArray(pending) || pending.length === 0) return;
+    writeStoredJSON(PENDING_REPORTS_KEY, []);
+    pending.forEach(report => {
+        sendReport(url, report).catch(() => queuePendingReport(report));
+    });
+}
+
+function reportToTeacher(activity, detail) {
+    const url = getTeacherSheetUrl();
+    if (!url || !currentPlayer) return;
+    const report = buildReport(activity, detail);
+    flushPendingReports();
+    try {
+        sendReport(url, report).catch(() => queuePendingReport(report));
+    } catch (e) {
+        queuePendingReport(report);
+    }
+}
+
 function saveProgress() {
     try {
         const data = {
@@ -1739,9 +1972,10 @@ function saveProgress() {
             currentPuzzleLevel: currentPuzzleLevel,
             currentPatternLevel: currentPatternLevel,
             mazeQuizCompleted: mazeQuizCompleted,
+            lastQuizScore: lastQuizScore,
             playerName: (dom.displayCertName && dom.displayCertName.innerText) ? dom.displayCertName.innerText : ''
         };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        localStorage.setItem(progressStorageKey(), JSON.stringify(data));
     } catch (e) {
         console.warn('Gagal menyimpan progres:', e);
     }
@@ -1833,7 +2067,7 @@ function updateProgressDisplays() {
 
 function loadProgress() {
     try {
-        const saved = localStorage.getItem(STORAGE_KEY);
+        const saved = localStorage.getItem(progressStorageKey());
         if (saved) {
             const data = JSON.parse(saved);
             if (Array.isArray(data.completedLevels)) {
@@ -1853,6 +2087,9 @@ function loadProgress() {
             }
             if (typeof data.mazeQuizCompleted === 'boolean') {
                 mazeQuizCompleted = data.mazeQuizCompleted;
+            }
+            if (typeof data.lastQuizScore === 'number') {
+                lastQuizScore = data.lastQuizScore;
             }
             if (data.playerName && dom.displayCertName) {
                 dom.displayCertName.innerText = data.playerName;
@@ -1956,13 +2193,15 @@ function resetAllProgress() {
         currentPuzzleLevel = 1;
         currentPatternLevel = 1;
         mazeQuizCompleted = false;
+        lastQuizScore = null;
         try {
-            localStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem(progressStorageKey());
         } catch (e) {}
         if (dom.displayCertName) dom.displayCertName.innerText = '';
         renderLevelsSelector();
         updateCertificateCard();
         updateProgressDisplays();
+        reportToTeacher('Mereset progres game');
         alert("Progres game berhasil direset ke awal.");
     }
 }
@@ -2037,6 +2276,15 @@ const dom = {
 
     levelsGrid: document.querySelector('.levels-grid'),
     mazeModeProgress: document.getElementById('maze-mode-progress'),
+    registerForm: document.getElementById('register-form'),
+    regName: document.getElementById('reg-name'),
+    regClass: document.getElementById('reg-class'),
+    registerError: document.getElementById('register-error'),
+    knownPlayers: document.getElementById('known-players'),
+    knownPlayersList: document.getElementById('known-players-list'),
+    playerBadgeName: document.getElementById('player-badge-name'),
+    playerBadgeClass: document.getElementById('player-badge-class'),
+    switchPlayerBtn: document.getElementById('switch-player-btn'),
     puzzleModeProgress: document.getElementById('puzzle-mode-progress'),
     patternModeProgress: document.getElementById('pattern-mode-progress'),
     mazeProgressPanel: document.getElementById('maze-progress-panel'),
@@ -2153,9 +2401,12 @@ const SVGS = {
    INITIALIZATION & NAVIGATION
    ========================================================================== */
 function initApp() {
-    loadProgress();
-    updateProgressDisplays();
     setupEventListeners();
+    // Pemain yang sudah mengisi data diri langsung masuk ke menu utama
+    if (!restoreActivePlayer()) {
+        showRegisterPage();
+    }
+    flushPendingReports();
     renderLevelsSelector();
     updateAudioIcon();
     updateCertificateCard();
@@ -2167,6 +2418,27 @@ function initApp() {
 }
 
 function setupEventListeners() {
+    // Halaman data diri
+    dom.registerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = capitalizeWords(cleanPlayerText(dom.regName.value));
+        const kelas = cleanPlayerText(dom.regClass.value).toUpperCase();
+        const error = validatePlayerInput(name, kelas);
+        if (error) {
+            synth.playWrong();
+            dom.registerError.innerText = error;
+            dom.registerError.classList.remove('hidden');
+            return;
+        }
+        synth.playSuccess();
+        registerPlayer(name, kelas);
+    });
+
+    dom.switchPlayerBtn.addEventListener('click', () => {
+        synth.playClick();
+        showRegisterPage();
+    });
+
     // Navigation - Game Mode Selection
     dom.modeMazeBtn.addEventListener('click', () => {
         synth.playClick();
@@ -2230,7 +2502,8 @@ function setupEventListeners() {
                 dom.certNameFinalView.classList.add('hidden');
                 dom.certNameEditView.classList.remove('hidden');
                 dom.printCertBtn.classList.add('hidden');
-                dom.playerCertName.value = (dom.displayCertName && dom.displayCertName.innerText !== 'Nama Peserta') ? dom.displayCertName.innerText : '';
+                const savedCertName = (dom.displayCertName && dom.displayCertName.innerText !== 'Nama Peserta') ? dom.displayCertName.innerText : '';
+                dom.playerCertName.value = savedCertName || (currentPlayer ? currentPlayer.name : '');
                 showScreen('certificate-page');
             } else {
                 startQuiz();
@@ -2321,6 +2594,7 @@ function setupEventListeners() {
             dom.certNameFinalView.classList.remove('hidden');
             dom.printCertBtn.classList.remove('hidden');
             saveProgress();
+            reportToTeacher('Mengklaim sertifikat', nameVal);
         } else {
             synth.playWrong();
             alert("Harap masukkan nama lengkap Anda!");
@@ -3289,6 +3563,7 @@ function showSuccessModal() {
     if (!completedLevels.includes(currentLevel)) {
         completedLevels.push(currentLevel);
         saveProgress();
+        reportToTeacher('Menyelesaikan Maze', `Misi ${currentLevel}`);
     }
 
     const lvl = LEVELS[currentLevel];
@@ -3417,8 +3692,13 @@ function finishQuiz() {
     dom.quizProgressFill.style.width = `100%`;
 
     const total = QUIZ_QUESTIONS.length;
+    const passed = quizScore >= QUIZ_PASS_SCORE;
+    lastQuizScore = quizScore;
+    if (passed) mazeQuizCompleted = true; // set before reporting so the teacher sees "Lulus"
+    saveProgress();
+    reportToTeacher('Mengerjakan Kuis', `Nilai ${quizScore}/${total} · ${passed ? 'Lulus' : 'Belum lulus'}`);
 
-    if (quizScore < QUIZ_PASS_SCORE) {
+    if (!passed) {
         synth.playFailure();
         alert(`Nilai kuismu ${quizScore} dari ${total}. Kamu membutuhkan minimal ${QUIZ_PASS_SCORE} jawaban benar untuk lulus.\n\nPelajari kembali materinya, lalu coba kuis sekali lagi!`);
         showScreen('landing-page');
@@ -3572,6 +3852,7 @@ function checkPuzzleSolution() {
         if (!completedPuzzleLevels.includes(currentPuzzleLevel)) {
             completedPuzzleLevels.push(currentPuzzleLevel);
             saveProgress();
+            reportToTeacher('Menyelesaikan Teka-Teki', `Teka-Teki ${currentPuzzleLevel}`);
         }
 
         // Show Success Modal tailored for puzzle
@@ -3701,6 +3982,7 @@ function checkPatternSolution() {
         if (!completedPatternLevels.includes(currentPatternLevel)) {
             completedPatternLevels.push(currentPatternLevel);
             saveProgress();
+            reportToTeacher('Menyelesaikan Pola', `Pola ${currentPatternLevel}`);
         }
 
         dom.successModalTitle.innerText = "Pola Berhasil Ditebak! 🎉";

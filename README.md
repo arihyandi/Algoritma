@@ -37,6 +37,12 @@ Setiap 5 level membentuk satu tingkat. Level berikutnya terbuka setelah level se
 
 Setelah lulus kuis, siswa mengetik nama lengkap dan dapat **mencetak / menyimpan sertifikat sebagai PDF** (gunakan menu *Print → Save as PDF* di browser).
 
+## Data Siswa untuk Guru
+
+Saat pertama kali membuka game, siswa **mengisi nama lengkap dan kelas**. Progres setiap siswa tersimpan terpisah, sehingga satu komputer lab bisa dipakai bergantian (tombol **🔁 Ganti Pemain** di menu utama).
+
+Jika guru memasang database, setiap progres (level selesai, nilai kuis, sertifikat) otomatis tercatat di **Google Spreadsheet milik guru**, yang hanya bisa dilihat oleh guru. Panduan pemasangan: [`panduan-guru/PANDUAN-DATABASE.md`](panduan-guru/PANDUAN-DATABASE.md).
+
 ## Cara Menjalankan
 
 **Di komputer lab (offline):**
@@ -63,6 +69,8 @@ Setelah lulus kuis, siswa mengetik nama lengkap dan dapat **mencetak / menyimpan
 index.html   Struktur halaman (menu, arena, kuis, sertifikat)
 style.css    Tampilan, tata letak responsif, dan gaya cetak sertifikat
 app.js       Logika game dan data soal
+config.js    URL database guru (Google Apps Script), kosongkan jika tidak dipakai
+panduan-guru/  Skrip Google Apps Script & panduan pemasangan database guru
 ```
 
 ### Mengubah atau Menambah Soal

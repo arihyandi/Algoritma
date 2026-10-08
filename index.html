@@ -25,8 +25,44 @@
     <!-- STAR BACKGROUND EFFECT -->
     <div class="stars-bg"></div>
 
+    <!-- 0. HALAMAN DATA DIRI (pertama kali dibuka) -->
+    <div id="register-page" class="view-screen active">
+        <div class="hero-container">
+            <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo school-logo-hero">
+            <div class="hero-logo">
+                <div class="logo-icon">🤖</div>
+                <h1>AlgoQuest</h1>
+                <p class="tagline">Petualangan Belajar Algoritma & Logika</p>
+            </div>
+
+            <form class="register-card glass-panel" id="register-form" novalidate>
+                <h2>📝 Isi Data Diri</h2>
+                <p class="register-intro">Sebelum mulai bermain, tuliskan nama lengkap dan kelasmu agar Bapak/Ibu Guru
+                    dapat melihat perkembangan belajarmu.</p>
+
+                <label class="register-field" for="reg-name">
+                    <span>Nama Lengkap</span>
+                    <input type="text" id="reg-name" maxlength="40" autocomplete="off" placeholder="contoh: Budi Santoso">
+                </label>
+                <label class="register-field" for="reg-class">
+                    <span>Kelas</span>
+                    <input type="text" id="reg-class" maxlength="15" autocomplete="off" placeholder="contoh: 7A">
+                </label>
+
+                <div class="register-error hidden" id="register-error" role="alert"></div>
+
+                <button type="submit" class="btn btn-primary btn-glow register-submit">Mulai Bermain →</button>
+
+                <div class="known-players hidden" id="known-players">
+                    <span class="known-players-title">Pernah bermain di perangkat ini? Pilih namamu:</span>
+                    <div class="known-players-list" id="known-players-list"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- 1. LANDING PAGE -->
-    <div id="landing-page" class="view-screen active">
+    <div id="landing-page" class="view-screen">
         <div class="hero-container">
             <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo school-logo-hero">
             <div class="hero-logo">
@@ -36,6 +72,10 @@
             </div>
 
             <div class="hero-card glass-panel">
+                <div class="player-badge">
+                    <span>👋 Halo, <strong id="player-badge-name">Pemain</strong> · Kelas <strong id="player-badge-class">-</strong></span>
+                    <button type="button" class="btn btn-secondary switch-player-btn" id="switch-player-btn">🔁 Ganti Pemain</button>
+                </div>
                 <p>Selamat datang di <strong>AlgoQuest</strong>! Di sini kamu akan belajar dasar-dasar pemrograman
                     dengan membantu <strong>Albi si Robot</strong> menjelajahi laboratorium siber melalui rangkaian
                     instruksi terstruktur.</p>
@@ -462,6 +502,7 @@
     </div>
 
     <!-- Load game script AFTER all DOM elements are rendered -->
+    <script src="config.js"></script>
     <script src="app.js"></script>
 </body>
 
