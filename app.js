@@ -2492,9 +2492,66 @@ const SVGS = {
 };
 
 /* ==========================================================================
+   LATAR ANIMASI SIMBOL KODING (tampil di semua halaman)
+   ========================================================================== */
+const CODE_BG_TOKENS = [
+    // Simbol umum pemrograman
+    { text: '{ }' }, { text: '</>' }, { text: '( )' }, { text: '[ ]' }, { text: '=>' }, { text: '&&' },
+    { text: '==' }, { text: '++' }, { text: '//' }, { text: ';' }, { text: '#' }, { text: '0101' },
+    { text: 'if' }, { text: 'else' }, { text: 'for' }, { text: 'while' }, { text: 'return' }, { text: 'true' },
+    // Potongan kode dari berbagai bahasa
+    { text: 'print("Halo!")', type: 'snippet' },
+    { text: 'for i in range(3):', type: 'snippet' },
+    { text: 'if (lampu == "merah")', type: 'snippet' },
+    { text: 'console.log(skor);', type: 'snippet' },
+    { text: 'while (!sampai) maju();', type: 'snippet' },
+    { text: 'int langkah = 0;', type: 'snippet' },
+    { text: 'def belok_kanan():', type: 'snippet' },
+    { text: '<h1>AlgoQuest</h1>', type: 'snippet' },
+    { text: 'ulangi 4 kali [ maju ]', type: 'snippet' },
+    { text: 'System.out.println();', type: 'snippet' },
+    { text: 'cout << "Albi";', type: 'snippet' },
+    { text: 'let pola = [1, 1, 2, 3];', type: 'snippet' },
+    // Nama bahasa pemrograman
+    { text: 'Python', type: 'lang' }, { text: 'JavaScript', type: 'lang' }, { text: 'Scratch', type: 'lang' },
+    { text: 'C++', type: 'lang' }, { text: 'Java', type: 'lang' }, { text: 'HTML', type: 'lang' }
+];
+const CODE_BG_TONES = ['#06b6d4', '#a855f7', '#10b981', '#eab308', '#f43f5e', '#6366f1'];
+
+function renderCodeBackground() {
+    const layer = document.getElementById('code-bg');
+    if (!layer) return;
+    layer.innerHTML = '';
+
+    // Fewer tokens on small screens so the game stays light on phones
+    const count = window.innerWidth < 600 ? 14 : 26;
+    const tokens = shuffleArray(CODE_BG_TOKENS).slice(0, count);
+
+    tokens.forEach((token, i) => {
+        const el = document.createElement('span');
+        el.className = 'code-token' + (token.type ? ` is-${token.type}` : '');
+        el.innerText = token.text;
+        const duration = 22 + Math.random() * 18;              // 22-40 detik per perjalanan
+        const lane = (i + 0.2 + Math.random() * 0.6) / count;  // spread evenly across the width
+        const maxX = token.type === 'snippet' ? 72 : 92;           // long code lines must not be cut off at the edge
+        el.style.setProperty('--x', `${Math.min(lane * 100, maxX).toFixed(1)}%`);
+        el.style.setProperty('--y', `${(Math.random() * 90).toFixed(1)}%`);
+        el.style.setProperty('--dur', `${duration.toFixed(1)}s`);
+        el.style.setProperty('--delay', `${(-Math.random() * duration).toFixed(1)}s`); // already mid-flight on load
+        el.style.setProperty('--size', `${(1.1 + Math.random() * 0.9).toFixed(2)}rem`);
+        el.style.setProperty('--rot', `${(Math.random() * 24 - 12).toFixed(0)}deg`);
+        el.style.setProperty('--sway', `${(Math.random() * 60 - 30).toFixed(0)}px`);
+        el.style.setProperty('--alpha', (token.type === 'snippet' ? 0.32 : 0.22 + Math.random() * 0.12).toFixed(2));
+        el.style.setProperty('--tone', CODE_BG_TONES[i % CODE_BG_TONES.length]);
+        layer.appendChild(el);
+    });
+}
+
+/* ==========================================================================
    INITIALIZATION & NAVIGATION
    ========================================================================== */
 function initApp() {
+    renderCodeBackground();
     setupEventListeners();
     // Pemain yang sudah mengisi data diri langsung masuk ke menu utama
     if (!restoreActivePlayer()) {
