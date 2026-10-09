@@ -1736,7 +1736,16 @@ const STORAGE_KEY = 'algoquest_game_progress_v1';
    ========================================================================== */
 const PLAYERS_KEY = 'algoquest_players_v1';           // daftar pemain di perangkat ini
 const ACTIVE_PLAYER_KEY = 'algoquest_active_player_v1';
-let currentPlayer = null;  // { id, name, kelas, registeredAt }
+let currentPlayer = null;  // { id, name, kelas, avatar, registeredAt }
+
+// Avatar pilihan siswa di halaman data diri
+const PLAYER_AVATARS = ['🤖', '🦊', '🐼', '🦁', '🐸', '🐯', '🦉', '🐧', '🦄', '🐙', '🐶', '🐱'];
+const DEFAULT_AVATAR = PLAYER_AVATARS[0];
+let selectedAvatar = DEFAULT_AVATAR;
+
+function playerAvatar(player) {
+    return player && PLAYER_AVATARS.includes(player.avatar) ? player.avatar : DEFAULT_AVATAR;
+}
 let lastQuizScore = null;  // nilai kuis terakhir (untuk laporan guru)
 
 function readStoredJSON(key, fallback) {
@@ -1790,13 +1799,18 @@ function makePlayerId() {
     return 'p-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
 }
 
-function registerPlayer(name, kelas) {
+function registerPlayer(name, kelas, avatar) {
     const players = getKnownPlayers();
     let player = players.find(p => p.name.toLowerCase() === name.toLowerCase() && p.kelas.toLowerCase() === kelas.toLowerCase());
     const isNew = !player;
 
+    if (!isNew && player.avatar !== avatar) {
+        player.avatar = avatar; // returning student picked a different avatar
+        writeStoredJSON(PLAYERS_KEY, players);
+    }
+
     if (isNew) {
-        player = { id: makePlayerId(), name, kelas, registeredAt: new Date().toISOString() };
+        player = { id: makePlayerId(), name, kelas, avatar, registeredAt: new Date().toISOString() };
         // Progres lama (dari sebelum ada halaman data diri) diwariskan ke pemain pertama di perangkat ini
         if (players.length === 0) {
             try {
@@ -1857,28 +1871,86 @@ function renderPlayerBadge() {
     if (!currentPlayer) return;
     dom.playerBadgeName.innerText = currentPlayer.name;
     dom.playerBadgeClass.innerText = currentPlayer.kelas;
+    dom.playerBadgeAvatar.innerText = playerAvatar(currentPlayer);
+}
+
+function selectAvatar(avatar) {
+    selectedAvatar = PLAYER_AVATARS.includes(avatar) ? avatar : DEFAULT_AVATAR;
+    dom.avatarOptions.querySelectorAll('.avatar-option').forEach(btn => {
+        const active = btn.dataset.avatar === selectedAvatar;
+        btn.classList.toggle('selected', active);
+        btn.setAttribute('aria-checked', active ? 'true' : 'false');
+    });
+    updateRegisterGreeting();
+}
+
+function renderAvatarOptions() {
+    dom.avatarOptions.innerHTML = '';
+    dom.avatarOptions.setAttribute('role', 'radiogroup');
+    PLAYER_AVATARS.forEach(avatar => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'avatar-option';
+        btn.dataset.avatar = avatar;
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-label', `Avatar ${avatar}`);
+        btn.innerText = avatar;
+        btn.addEventListener('click', () => {
+            synth.playClick();
+            selectAvatar(avatar);
+        });
+        dom.avatarOptions.appendChild(btn);
+    });
+}
+
+// Albi's speech bubble greets the student by first name while they type
+function updateRegisterGreeting() {
+    const firstName = cleanPlayerText(dom.regName.value).split(' ')[0];
+    dom.regGreeting.innerText = firstName.length >= 2
+        ? `Halo, ${capitalizeWords(firstName)} ${selectedAvatar}! Siap jadi programmer hebat?`
+        : 'Halo! Aku Albi 👋 Siap berpetualang bersamaku?';
 }
 
 function showRegisterPage() {
     dom.regName.value = '';
     dom.regClass.value = '';
     dom.registerError.classList.add('hidden');
+    selectAvatar(DEFAULT_AVATAR);
 
-    // Quick-pick buttons for students who already played on this device
+    // Quick-pick cards for students who already played on this device
     const players = getKnownPlayers();
     dom.knownPlayersList.innerHTML = '';
     players.forEach(p => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'known-player-btn';
-        btn.innerText = `${p.name} · ${p.kelas}`;
+        const avatar = document.createElement('span');
+        avatar.className = 'known-player-avatar';
+        avatar.innerText = playerAvatar(p);
+        const label = document.createElement('span');
+        label.className = 'known-player-label';
+        const nameEl = document.createElement('strong');
+        nameEl.innerText = p.name;
+        const classEl = document.createElement('small');
+        classEl.innerText = `Kelas ${p.kelas}`;
+        label.append(nameEl, classEl);
+        btn.append(avatar, label);
         btn.addEventListener('click', () => {
             synth.playClick();
             dom.regName.value = p.name;
             dom.regClass.value = p.kelas;
             dom.registerError.classList.add('hidden');
+            selectAvatar(playerAvatar(p));
         });
         dom.knownPlayersList.appendChild(btn);
+    });
+
+    // Class suggestions from students on this device (e.g. 7A, 7B)
+    dom.classSuggestions.innerHTML = '';
+    [...new Set(players.map(p => p.kelas))].forEach(kelas => {
+        const opt = document.createElement('option');
+        opt.value = kelas;
+        dom.classSuggestions.appendChild(opt);
     });
     dom.knownPlayers.classList.toggle('hidden', players.length === 0);
 
@@ -2303,6 +2375,10 @@ const dom = {
     playerBadgeName: document.getElementById('player-badge-name'),
     playerBadgeClass: document.getElementById('player-badge-class'),
     switchPlayerBtn: document.getElementById('switch-player-btn'),
+    playerBadgeAvatar: document.getElementById('player-badge-avatar'),
+    avatarOptions: document.getElementById('avatar-options'),
+    regGreeting: document.getElementById('reg-greeting'),
+    classSuggestions: document.getElementById('class-suggestions'),
     puzzleModeProgress: document.getElementById('puzzle-mode-progress'),
     patternModeProgress: document.getElementById('pattern-mode-progress'),
     mazeProgressPanel: document.getElementById('maze-progress-panel'),
@@ -2449,8 +2525,11 @@ function setupEventListeners() {
             return;
         }
         synth.playSuccess();
-        registerPlayer(name, kelas);
+        registerPlayer(name, kelas, selectedAvatar);
     });
+
+    renderAvatarOptions();
+    dom.regName.addEventListener('input', updateRegisterGreeting);
 
     dom.switchPlayerBtn.addEventListener('click', () => {
         synth.playClick();

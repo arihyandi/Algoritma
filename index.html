@@ -27,40 +27,73 @@
 
     <!-- 0. HALAMAN DATA DIRI (pertama kali dibuka) -->
     <div id="register-page" class="view-screen active">
-        <div class="hero-container">
-            <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo school-logo-hero">
-            <div class="hero-logo">
-                <div class="logo-icon">🤖</div>
-                <h1>AlgoQuest</h1>
-                <p class="tagline">Petualangan Belajar Algoritma & Logika</p>
-            </div>
+        <!-- Simbol kode yang melayang di latar belakang -->
+        <div class="login-floaters" aria-hidden="true">
+            <span>{ }</span><span>↻</span><span>if</span><span>⬆</span><span>01</span>
+            <span>&lt;/&gt;</span><span>?</span><span>↷</span><span>for</span><span>★</span>
+        </div>
 
-            <form class="register-card glass-panel" id="register-form" novalidate>
-                <h2>📝 Isi Data Diri</h2>
-                <p class="register-intro">Sebelum mulai bermain, tuliskan nama lengkap dan kelasmu agar Bapak/Ibu Guru
-                    dapat melihat perkembangan belajarmu.</p>
+        <div class="login-layout">
+            <!-- Kolom kiri: sambutan Albi -->
+            <section class="login-hero">
+                <img src="assets/logo-kalam-kudus.png" alt="Logo Kalam Kudus" class="school-logo login-school-logo">
+                <div class="login-robot-stage">
+                    <div class="login-speech" id="reg-greeting" aria-live="polite">Halo! Aku Albi 👋 Siap berpetualang bersamaku?</div>
+                    <div class="login-robot" aria-hidden="true">🤖</div>
+                    <div class="login-robot-shadow" aria-hidden="true"></div>
+                </div>
+                <h1 class="login-title">AlgoQuest</h1>
+                <p class="login-tagline">Petualangan Belajar Algoritma & Logika</p>
+                <ul class="login-stats">
+                    <li class="stat-maze"><b>25</b><span>🗺️ Misi Labirin</span></li>
+                    <li class="stat-puzzle"><b>25</b><span>🧩 Teka-Teki</span></li>
+                    <li class="stat-pattern"><b>50</b><span>🎨 Pola</span></li>
+                    <li class="stat-cert"><b>🏆</b><span>Sertifikat</span></li>
+                </ul>
+            </section>
 
-                <label class="register-field" for="reg-name">
-                    <span>Nama Lengkap</span>
-                    <input type="text" id="reg-name" maxlength="40" autocomplete="off" placeholder="contoh: Budi Santoso">
+            <!-- Kolom kanan: formulir data diri -->
+            <form class="login-card glass-panel" id="register-form" novalidate>
+                <div class="login-card-head">
+                    <h2>🚀 Daftar Jadi Petualang</h2>
+                    <p class="register-intro">Isi nama dan kelasmu agar Bapak/Ibu Guru dapat melihat perkembangan belajarmu.</p>
+                </div>
+
+                <fieldset class="avatar-picker">
+                    <legend>Pilih avatarmu</legend>
+                    <div class="avatar-options" id="avatar-options"></div>
+                </fieldset>
+
+                <label class="login-field" for="reg-name">
+                    <span class="login-field-label">Nama Lengkap</span>
+                    <span class="login-input-wrap">
+                        <span class="login-input-icon" aria-hidden="true">👤</span>
+                        <input type="text" id="reg-name" maxlength="40" autocomplete="off" placeholder="contoh: Budi Santoso">
+                    </span>
                 </label>
-                <label class="register-field" for="reg-class">
-                    <span>Kelas</span>
-                    <input type="text" id="reg-class" maxlength="15" autocomplete="off" placeholder="contoh: 7A">
+                <label class="login-field" for="reg-class">
+                    <span class="login-field-label">Kelas</span>
+                    <span class="login-input-wrap">
+                        <span class="login-input-icon" aria-hidden="true">🏫</span>
+                        <input type="text" id="reg-class" maxlength="15" autocomplete="off" placeholder="contoh: 7A" list="class-suggestions">
+                    </span>
+                    <datalist id="class-suggestions"></datalist>
                 </label>
 
                 <div class="register-error hidden" id="register-error" role="alert"></div>
 
-                <button type="submit" class="btn btn-primary btn-glow register-submit">Mulai Bermain →</button>
+                <button type="submit" class="btn btn-primary btn-glow register-submit login-submit">
+                    <span>Mulai Petualangan</span><span class="login-submit-arrow" aria-hidden="true">→</span>
+                </button>
 
                 <div class="known-players hidden" id="known-players">
-                    <span class="known-players-title">Pernah bermain di perangkat ini? Pilih namamu:</span>
+                    <span class="known-players-title">👋 Pernah bermain di perangkat ini? Klik namamu:</span>
                     <div class="known-players-list" id="known-players-list"></div>
                 </div>
             </form>
-
-            <button type="button" class="teacher-link open-teacher-panel">🔒 Panel Guru</button>
         </div>
+
+        <button type="button" class="teacher-link open-teacher-panel">🔒 Panel Guru</button>
     </div>
 
     <!-- PANEL GURU: rekap siswa di perangkat ini + unduh Excel (teacher-panel.js) -->
@@ -149,7 +182,7 @@
 
             <div class="hero-card glass-panel">
                 <div class="player-badge">
-                    <span>👋 Halo, <strong id="player-badge-name">Pemain</strong> · Kelas <strong id="player-badge-class">-</strong></span>
+                    <span><span class="player-badge-avatar" id="player-badge-avatar">🤖</span> Halo, <strong id="player-badge-name">Pemain</strong> · Kelas <strong id="player-badge-class">-</strong></span>
                     <button type="button" class="btn btn-secondary switch-player-btn" id="switch-player-btn">🔁 Ganti Pemain</button>
                 </div>
                 <p>Selamat datang di <strong>AlgoQuest</strong>! Di sini kamu akan belajar dasar-dasar pemrograman
